@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="status_header">Status</string>
+    <string name="status_attributes_header">Attributes</string>
+    <string name="status_rank">Rank</string>
+    <string name="status_level">Level</string>
+    <string name="status_rank_sigma">Σ</string>
+    <string name="status_xp">XP</string>
+    <string name="status_hp">HP</string>
+    <string name="status_mp">MP</string>
+    <!-- Spoken by TalkBack for the rank and level row. -->
+    <string name="status_rank_level_description">Rank %1$s, level %2$d</string>
+    <!-- Spoken by TalkBack for one attribute row, e.g. "Strength 12". -->
+    <string name="status_stat_description">%1$s %2$d</string>
+
+    <string name="status_radar_header">Attribute map</string>
+    <!-- Spoken by TalkBack for the radar, e.g. "Attributes: STR 12, AGI 11, …". -->
+    <string name="status_radar_description">Attributes: %1$s</string>
+    <string name="status_add_point_description">Add a point to %1$s</string>
+    <string name="status_pending_points">+%1$d</string>
+    <string name="status_confirm_points">Confirm</string>
+    <string name="status_reset_points">Reset</string>
+
+    <plurals name="status_free_points">
+        <item quantity="one">%d attribute point awaits allocation</item>
+        <item quantity="other">%d attribute points await allocation</item>
+    </plurals>
+
+    <plurals name="status_streak">
+        <item quantity="one">%d-day streak</item>
+        <item quantity="other">%d-day streak</item>
+    </plurals>
+
+    <string name="stat_str">Strength</string>
+    <string name="stat_agi">Agility</string>
+    <string name="stat_int">Intellect</string>
+    <string name="stat_foc">Focus</string>
+    <string name="stat_wis">Wisdom</string>
+    <string name="stat_vit">Vitality</string>
+
+    <!-- Phase 3 -->
+    <string name="status_open_inventory">Inventory</string>
+    <string name="status_open_codex">Codex</string>
+    <plurals name="status_codex_unread">
+        <item quantity="one">Codex, %1$d new record</item>
+        <item quantity="other">Codex, %1$d new records</item>
+    </plurals>
+    <string name="status_powers_ready">Powers ready</string>
+    <string name="status_cast_power">Cast %1$s</string>
+    <string name="status_open_power">%1$s: open the Skills tab to cast</string>
+    <string name="status_trial_header">Rank trial · %1$s</string>
+    <string name="status_trial_line">%1$d days left · %2$d/%3$d objectives</string>
+    <string name="status_class_line">%1$s · +10%% %2$s</string>
+    <string name="status_open_settings">Settings</string>
+    <plurals name="status_avatar_description">
+        <item quantity="one">Your avatar, %d piece of gear equipped</item>
+        <item quantity="other">Your avatar, %d pieces of gear equipped</item>
+    </plurals>
+
+    <!-- Settings (Task 1) -->
+    <string name="settings_header">Settings</string>
+    <string name="settings_rhythm">Rhythm</string>
+    <string name="settings_reset">Daily reset</string>
+    <string name="settings_wake">Wake time</string>
+    <string name="settings_quiet_start">Quiet hours start</string>
+    <string name="settings_quiet_end">Quiet hours end</string>
+    <string name="settings_rest_days">Rest days (at least one)</string>
+    <string name="settings_dossier">Dossier notes</string>
+    <string name="settings_dossier_hint">Research, constraints, preferences. Sent to Claude with your status.</string>
+    <string name="settings_feedback">Sound and haptics</string>
+    <string name="settings_sound">System sounds</string>
+    <string name="settings_haptics">Haptic pulses</string>
+    <string name="settings_sound_note">Always silent when your phone is on silent.</string>
+    <string name="settings_save">Save</string>
+    <string name="settings_saved">Saved.</string>
+    <string name="settings_back">Back</string>
+    <string name="settings_earlier">15 minutes earlier: %1$s</string>
+    <string name="settings_later">15 minutes later: %1$s</string>
+
+    <!-- Phase 5: backup and restore -->
+    <string name="backup_header">Backup</string>
+    <string name="backup_folder">Backup folder</string>
+    <string name="backup_folder_none">No folder picked yet</string>
+    <string name="backup_folder_pick">Pick a folder</string>
+    <string name="backup_folder_change">Change folder</string>
+    <string name="backup_schedule">A backup is written there every day after the reset, when anything changed. Kept: the last 14 days and one per month for a year. A sync app can copy the folder off your phone.</string>
+    <string name="backup_last">Last backup: %1$s</string>
+    <string name="backup_last_never">No backup yet.</string>
+    <string name="backup_last_error">The last scheduled backup failed: %1$s</string>
+    <string name="backup_now">Back up now</string>
+    <string name="backup_working">Working…</string>
+    <string name="backup_written">Saved %1$s.</string>
+    <string name="backup_failed">The backup failed: %1$s</string>
+    <string name="backup_no_folder">Pick a backup folder first.</string>
+    <string name="backup_journal">Include Clarity’s journal</string>
+    <string name="backup_journal_note">Your journal lines go into backups unless you switch this off. Backups may end up in a synced folder.</string>
+    <string name="backup_restore">Restore from a backup</string>
+    <string name="backup_restore_note">Replaces everything with the backup. Your current state is saved first, and you can undo until the next reset.</string>
+    <string name="backup_confirm_title">Restore this backup?</string>
+    <string name="backup_confirm_body">Made %1$s.\nLevel %2$d · %3$s XP · streak %4$d.\n\nASCENT saves your current state, then restarts with the backup. Days between the backup and now count as neither done nor missed.</string>
+    <string name="backup_confirm_body_unknown">Made %1$s.\n\nASCENT saves your current state, then restarts with the backup. Days between the backup and now count as neither done nor missed.</string>
+    <string name="backup_confirm_journal_out">This backup doesn’t include Clarity’s journal.</string>
+    <string name="backup_confirm">Restore and restart</string>
+    <string name="backup_cancel">Cancel</string>
+    <string name="backup_refused_corrupt">That file is damaged or isn’t a zip. Nothing was changed.</string>
+    <string name="backup_refused_foreign">That isn’t an ASCENT backup. Nothing was changed.</string>
+    <string name="backup_refused_hash">That backup doesn’t match its own checksum, so it may be damaged. Nothing was changed.</string>
+    <string name="backup_refused_newer">That backup comes from a newer version of ASCENT (schema %1$d; this one reads up to %2$d). Update the app first. Nothing was changed.</string>
+    <string name="backup_refused_failed">The restore couldn’t be prepared: %1$s. Nothing was changed.</string>
+    <string name="backup_restored">Restored the backup from %1$s: level %2$d · %3$s XP · streak %4$d.</string>
+    <string name="backup_restored_counts">Some records were fewer than the backup listed. Undo restore if anything looks wrong.</string>
+    <string name="backup_undo">Undo restore</string>
+    <string name="backup_undo_note">Available until the next reset.</string>
+    <string name="backup_dismiss">OK</string>
+    <string name="backup_unavailable">File access isn’t available here.</string>
+    <string name="backup_export">Export data</string>
+    <string name="backup_export_note">A zip of CSV files (quests, days, habits, XP) with a README, for a spreadsheet or a notebook. For reading only: it can’t be restored.</string>
+    <string name="backup_exported">Exported.</string>
+    <string name="backup_export_failed">The export couldn’t be written. Nothing was changed.</string>
+
+    <!-- Phase 5: Status staleness line -->
+    <string name="status_backup_never">◆ No backup yet. Set one up in Settings → Backup.</string>
+    <plurals name="status_backup_stale">
+        <item quantity="one">◆ Last backup %1$d day ago. Back up in Settings.</item>
+        <item quantity="other">◆ Last backup %1$d days ago. Back up in Settings.</item>
+    </plurals>
+</resources>

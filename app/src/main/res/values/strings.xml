@@ -1,0 +1,69 @@
+<resources>
+    <string name="app_name">ASCENT</string>
+    <string name="share_target_label">Import to ASCENT</string>
+
+    <string name="nav_status">Status</string>
+    <string name="nav_quests">Quests</string>
+    <string name="nav_console">Console</string>
+    <string name="nav_gates">Gates</string>
+    <string name="nav_skills">Skills</string>
+    <string name="record_header">New record</string>
+    <string name="rank_up_header">◆ RANK UP</string>
+    <string name="rank_up_message">Rank %1$s. The Observer adjusts its measure of you.</string>
+    <string name="rank_up_avatar">Your avatar in its new aura</string>
+
+    <string name="level_up_header">Level up</string>
+    <plurals name="level_up_message">
+        <item quantity="one">%1$d → %2$d. %3$d attribute point awaits allocation.</item>
+        <item quantity="other">%1$d → %2$d. %3$d attribute points await allocation.</item>
+    </plurals>
+    <string name="level_up_continue">Continue</string>
+
+    <string name="notification_channel_name">System</string>
+    <string name="notification_channel_description">Quests issued at the reset, reminders, emergencies, and what the System measured overnight.</string>
+    <string name="notification_quest_issued_title">◆ QUEST ISSUED</string>
+    <plurals name="notification_quest_issued_body">
+        <item quantity="one">%1$d objective. Expires %2$s.</item>
+        <item quantity="other">%1$d objectives. Expires %2$s.</item>
+    </plurals>
+    <string name="notification_reminder_title">◆ WARNING</string>
+    <string name="notification_reminder_body">Daily objectives incomplete: %1$d of %2$d done. The day ends at %3$s.</string>
+    <string name="notification_emergency_title">◆ EMERGENCY QUEST</string>
+    <string name="notification_emergency_body">%1$s Ends at %2$s.</string>
+
+    <!-- Phase 3: System notices (headers are uppercased by the panel) -->
+    <string name="chest_header">Chest opened</string>
+    <string name="notice_continue">Continue</string>
+    <string name="notice_achievement">Achievement unlocked</string>
+    <string name="notice_hidden">Hidden condition met</string>
+    <string name="notice_title">Title earned</string>
+    <string name="notice_lore">Lore recorded</string>
+    <string name="notice_chapter">Chapter complete</string>
+    <string name="notice_arc">Arc complete</string>
+    <string name="notice_gate_cleared">Gate cleared</string>
+    <string name="notice_gate_partial">Gate closed</string>
+    <string name="notice_gate_broken">Gate break</string>
+    <string name="notice_gate_failed">Red Gate failed</string>
+    <string name="notice_boss_phase">Phase shift</string>
+    <string name="notice_boss_defeated">Fixed point resolved</string>
+    <string name="notice_boss_stirs">It stirs</string>
+    <string name="notice_boss_enraged">Past the deadline</string>
+    <string name="notice_trial_won">Trial won</string>
+    <string name="notice_trial_failed">Trial noted</string>
+    <string name="notice_penalty">Warning — penalty issued</string>
+    <string name="notice_emergency">Emergency quest</string>
+    <string name="notice_skill_unlocked">Skill acquired</string>
+    <string name="notice_class_awakened">Class awakened</string>
+    <string name="notice_rank_trial_open">Rank trial open</string>
+    <string name="notice_rank_up">Rank up</string>
+    <string name="notice_rank_trial_failed">Rank trial closed</string>
+    <string name="notice_streak_shielded">Streak shielded</string>
+    <string name="notice_gate_xp">+%1$s XP</string>
+    <string name="chest_item_detail">%1$s · %2$s</string>
+
+    <string name="rarity_common">Common</string>
+    <string name="rarity_rare">Rare</string>
+    <string name="rarity_epic">Epic</string>
+    <string name="rarity_legendary">Legendary</string>
+    <string name="rarity_mythic">Mythic</string>
+</resources>

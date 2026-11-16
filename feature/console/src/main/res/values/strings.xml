@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="console_ask_header">Ask the System</string>
+    <string name="console_ask_prompt">Send your status to Claude, in your ASCENT System project. Claude\'s proposals come back as cards here.</string>
+    <string name="console_starters">Quick starters</string>
+    <string name="console_share">Share to Claude</string>
+    <string name="console_copy">Copy</string>
+    <string name="console_share_chooser">Send status to</string>
+    <string name="console_clip_label">ASCENT STATUS</string>
+    <string name="console_preview">Status preview</string>
+    <string name="console_import_header">Import from Claude</string>
+    <string name="console_import_prompt">Copy Claude\'s reply, then import it. Or share the reply straight to ASCENT.</string>
+    <string name="console_import">Import from Claude</string>
+    <string name="console_reading">Reading…</string>
+
+    <string name="starter_plan_day">Plan my day</string>
+    <string name="starter_set_week">Set this week</string>
+    <string name="starter_report">Report</string>
+    <string name="starter_low_energy">Low energy today</string>
+
+    <string name="console_message_clipboard_empty">The clipboard is empty. Copy Claude\'s whole reply first.</string>
+    <string name="console_message_no_block">No ascent block found in that text. Nothing to import.</string>
+    <string name="console_message_copied">Status copied. Paste it into Claude.</string>
+    <string name="console_ok">OK</string>
+
+    <string name="console_proposals_header">Proposals</string>
+    <string name="console_apply">Apply selected (%1$d)</string>
+    <string name="console_dismiss">Dismiss</string>
+    <string name="console_problems_header">Couldn\'t read</string>
+    <string name="console_result">Applied %1$d. Goals +%2$d · Quests +%3$d · Done %4$d · Changed %5$d · Removed %6$d · Arcs, Gates, bosses and lore +%7$d</string>
+    <string name="console_result_failed">%1$d could not be applied.</string>
+
+    <string name="card_add_goal">Add goal</string>
+    <string name="card_add_quest">Add quest</string>
+    <string name="card_complete">Mark done</string>
+    <string name="card_edit">Change</string>
+    <string name="card_remove">Remove</string>
+    <string name="card_select_description">Apply: %1$s</string>
+    <string name="card_scope_daily">today</string>
+    <string name="card_scope_weekly">this week</string>
+    <string name="card_horizon_week">this week</string>
+    <string name="card_horizon_long">long-term</string>
+    <string name="card_change_target">target → %1$s</string>
+    <string name="card_change_title">title → %1$s</string>
+    <string name="card_change_tier">tier → %1$s</string>
+    <string name="card_change_repeat">repeats → %1$s</string>
+    <string name="card_yes">yes</string>
+    <string name="card_no">no</string>
+
+    <!-- Bridge v2 (Phase 3) -->
+    <string name="card_add_side">Add side quest</string>
+    <string name="card_hit_boss">Strike boss task</string>
+    <string name="card_add_arc">Add arc</string>
+    <string name="card_add_gate">Open Gate</string>
+    <string name="card_add_boss">Add boss</string>
+    <string name="card_add_boss_task">Add boss task</string>
+    <string name="card_add_lore">Add lore line</string>
+    <plurals name="card_chapters">
+        <item quantity="one">%1$d chapter</item>
+        <item quantity="other">%1$d chapters</item>
+    </plurals>
+    <plurals name="card_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="card_phases">
+        <item quantity="one">%1$d phase</item>
+        <item quantity="other">%1$d phases</item>
+    </plurals>
+    <string name="card_finale_boss">finale: %1$s</string>
+    <string name="card_finale_title">title: %1$s</string>
+    <string name="card_gate_rank">rank %1$s</string>
+    <string name="card_boss_hours">%1$s h</string>
+    <string name="card_deadline">deadline %1$s</string>
+    <string name="card_task_detail">%1$s · phase %2$d · %3$s h</string>
+
+    <string name="note_unknown_quest">No quest with this id. It may be from an old status.</string>
+    <string name="note_unknown_goal">Unknown goal id. The link was dropped.</string>
+    <string name="note_forbidden">Blocked: no fasting, calorie or weight-loss quests.</string>
+    <string name="note_target_clamped">Target adjusted by the engine: %1$s → %2$s.</string>
+    <string name="note_sleep_floor">Sleep never goes below 7 h: %1$s → %2$s.</string>
+    <string name="note_rest_day">Rest day: eased to easy.</string>
+    <string name="note_muscle_repeat">Same muscle group as yesterday: eased to normal.</string>
+    <string name="note_already_done">Already done.</string>
+    <string name="note_not_open">This quest is closed.</string>
+    <string name="note_not_current">This quest is from an earlier day or week.</string>
+    <string name="note_nothing_to_edit">Nothing to change.</string>
+    <string name="note_side_limit">Three side quests are already open.</string>
+    <string name="note_expiry_clamped">Side quests last 1–3 days: %1$s → %2$s.</string>
+    <string name="note_chapter_count">%1$s chapters; arcs usually have 3–6. You can add chapters later.</string>
+    <string name="note_unknown_arc">Unknown arc id. The link was dropped.</string>
+    <string name="note_unknown_boss">No boss with this id.</string>
+    <string name="note_unknown_task">No boss task with this id.</string>
+    <string name="note_task_locked">This task\'s phase isn\'t open yet.</string>
+    <string name="note_boss_not_active">This boss isn\'t active.</string>
+    <string name="note_boss_limit">Two bosses (and one raid) are already active.</string>
+    <string name="note_hours_clamped">Hour estimates kept within 0.25–40 h.</string>
+    <string name="note_bad_phase">Bosses have at most 5 phases, filled in order.</string>
+    <string name="note_gate_limit">Two Gates are already open.</string>
+    <string name="note_rank_corrected">Rank corrected to your effort: %1$s → %2$s.</string>
+    <string name="note_days_clamped">Gates last 3–7 days: %1$s → %2$s.</string>
+    <string name="note_body_cap" formatted="false">Blocked: this Body load would break the +10% weekly limit.</string>
+    <string name="note_unknown_target">Unknown arc, boss or Gate id.</string>
+    <string name="note_bad_event">That event doesn\'t fit this target.</string>
+    <string name="note_lore_invalid">Blocked: lore must be short, original and follow the lore bible.</string>
+    <string name="note_lore_frozen">That line already unlocked; it\'s frozen.</string>
+
+    <string name="problem_no_block">No ascent block found.</string>
+    <string name="problem_bad_json">The block isn\'t valid JSON.</string>
+    <string name="problem_not_object">The block isn\'t a JSON object.</string>
+    <string name="problem_no_actions">The block has no actions list.</string>
+    <string name="problem_version">Unknown block version; read as version 2.</string>
+    <string name="problem_action_not_object">Action %1$d isn\'t an object.</string>
+    <string name="problem_unknown_op">Action %1$d: unknown op.</string>
+    <string name="problem_missing_field">Action %1$d: missing %2$s.</string>
+    <string name="problem_bad_value">Action %1$d: unreadable %2$s.</string>
+
+    <string name="realm_body">Body</string>
+    <string name="realm_mind">Mind</string>
+    <string name="realm_self">Self</string>
+    <string name="tier_easy">Easy</string>
+    <string name="tier_normal">Normal</string>
+    <string name="tier_hard">Hard</string>
+    <string name="tier_other">Other</string>
+</resources>

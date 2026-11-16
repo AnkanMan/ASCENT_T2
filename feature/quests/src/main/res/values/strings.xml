@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quests_daily_header">Daily quest</string>
+    <string name="quests_tab_today">Today</string>
+    <string name="quests_tab_week">This week</string>
+    <string name="quests_your_quests">Your quests</string>
+    <string name="quests_your_quests_note">These pay XP but don\'t count toward the streak.</string>
+    <string name="quests_weekly_header">Weekly quests</string>
+    <string name="quests_goals_header">Goals</string>
+    <string name="quests_none_today">No quests yet. The System issues them at the reset.</string>
+    <string name="quests_none_week">No weekly quests. Add one, or ask the System to set the week.</string>
+    <string name="quests_no_goals">No goals yet.</string>
+    <string name="quests_add_quest">Add quest</string>
+    <string name="quests_add_goal">Add goal</string>
+    <string name="quests_xp">XP</string>
+    <string name="quests_progress">%1$d / %2$d done</string>
+    <string name="quests_resets_in">Resets in %1$d h %2$d min</string>
+    <string name="quests_target">%1$s %2$s</string>
+    <string name="quests_goal_progress">%1$s / %2$s %3$s</string>
+    <string name="quests_goal_progress_count">%1$s done</string>
+    <string name="quests_goal_done">Mark done</string>
+    <string name="quests_goal_done_description">Mark goal %1$s done</string>
+    <string name="quests_repeats">Repeats</string>
+    <string name="quests_from_claude">From the System</string>
+    <string name="quests_xp_gained">+%1$d XP</string>
+    <string name="quests_xp_critical">Critical +%1$d XP</string>
+    <string name="quests_xp_awarded">%1$d XP</string>
+    <!-- TalkBack labels for the hexagon check-off. -->
+    <string name="quests_complete_description">Complete %1$s</string>
+    <string name="quests_undo_description">%1$s done. Tap to undo</string>
+    <string name="quests_locked_description">%1$s done</string>
+
+    <string name="quests_form_header">New quest</string>
+    <string name="quests_goal_form_header">New goal</string>
+    <string name="quests_form_title">Title</string>
+    <string name="quests_form_target">Target</string>
+    <string name="quests_form_unit">Unit (e.g. reps, min, pages)</string>
+    <string name="quests_form_realm">Realm</string>
+    <string name="quests_form_stat">Stat</string>
+    <string name="quests_form_tier">Tier</string>
+    <string name="quests_form_scope">When</string>
+    <string name="quests_form_daily">Today</string>
+    <string name="quests_form_weekly">This week</string>
+    <string name="quests_form_recurring">Repeats every day</string>
+    <string name="quests_form_goal">Goal</string>
+    <string name="quests_form_no_goal">None</string>
+    <string name="quests_form_xp_preview">Pays %1$d XP</string>
+    <string name="quests_form_forbidden">The System doesn\'t issue fasting, calorie or weight-loss quests.</string>
+    <string name="quests_form_horizon">Horizon</string>
+    <string name="quests_form_week">This week</string>
+    <string name="quests_form_long">Long-term</string>
+    <string name="quests_form_save">Add</string>
+    <string name="quests_form_cancel">Cancel</string>
+
+    <string name="realm_body">Body</string>
+    <string name="realm_mind">Mind</string>
+    <string name="realm_self">Self</string>
+    <string name="tier_trivial">Trivial</string>
+    <string name="tier_easy">Easy</string>
+    <string name="tier_normal">Normal</string>
+    <string name="tier_hard">Hard</string>
+    <string name="tier_extreme">Extreme</string>
+    <string name="quests_cast_on">Cast a power on this quest</string>
+    <string name="quests_collapsed">◈ Collapsed: this one task, until it’s done or the day ends</string>
+    <string name="quests_show_all">Show all</string>
+
+    <!-- Phase 5: habit strength -->
+    <string name="quests_strength_chip">↻ %1$d%%</string>
+    <string name="quests_strength_description">Habit strength %1$d%%, %2$s. Show details</string>
+    <string name="habit_header">Habit strength</string>
+    <string name="habit_percent">%1$d%%</string>
+    <string name="habit_label_unstable">Unstable</string>
+    <string name="habit_label_forming">Forming</string>
+    <string name="habit_label_holding">Holding</string>
+    <string name="habit_label_bound">Bound</string>
+    <plurals name="habit_streak_days">
+        <item quantity="one">Streak %1$d day · best %2$d</item>
+        <item quantity="other">Streak %1$d days · best %2$d</item>
+    </plurals>
+    <plurals name="habit_streak_weeks">
+        <item quantity="one">Streak %1$d week · best %2$d</item>
+        <item quantity="other">Streak %1$d weeks · best %2$d</item>
+    </plurals>
+    <string name="habit_measuring_since">Measuring since %1$s</string>
+    <string name="habit_sparkline_description">Strength over the last %1$d periods, now %2$d%%</string>
+    <string name="habit_explain">A smoothed record of how often this quest was done. One miss is a dip, not a reset; powers never change it.</string>
+    <string name="habit_none">No days recorded yet. The first one counts at the reset.</string>
+    <string name="habit_close">Close</string>
+
+    <!-- Phase 5: grind guard -->
+    <string name="quests_guard_line">◆ DIMINISHING RETURNS — The Observer measures effort, not entries.</string>
+    <string name="quests_guard_pays">pays %1$d%%</string>
+    <string name="quests_guard_paid">paid %1$d%%</string>
+    <string name="quests_extras_today">Extras today: %1$d (%2$d at full XP)</string>
+</resources>

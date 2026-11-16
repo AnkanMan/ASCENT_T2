@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="awakening_detection">An excitation has been detected. Begin measurement?</string>
+    <string name="awakening_begin">Begin measurement</string>
+    <string name="awakening_next">Continue</string>
+    <string name="awakening_back">Back</string>
+    <string name="awakening_finish">Awaken</string>
+
+    <string name="awakening_identity_header">Identity</string>
+    <string name="awakening_identity_prompt">State your name.</string>
+    <string name="awakening_name_label">Name</string>
+    <string name="awakening_title_line">Title assigned: The Unmeasured</string>
+
+    <string name="awakening_measure_header">Measurement</string>
+    <string name="awakening_measure_prompt">Enter where you are now and your own goal. Leave a row empty to skip it.</string>
+    <string name="awakening_now">Now</string>
+    <string name="awakening_goal">Goal</string>
+    <string name="awakening_invalid_number">Enter a number, or leave it empty.</string>
+    <string name="measure_push_ups">Max push-ups in one set</string>
+    <string name="measure_squats">Max squats in one set</string>
+    <string name="measure_plank">Max plank hold (seconds)</string>
+    <string name="measure_steps">Average daily steps</string>
+    <string name="measure_run">1 km run time (minutes)</string>
+    <string name="measure_deep_work">Deep work per day (hours)</string>
+    <string name="measure_pages">Pages read per week</string>
+    <string name="measure_sleep">Average sleep (hours)</string>
+    <string name="awakening_agility_steps">Steps</string>
+    <string name="awakening_agility_run">1 km run</string>
+
+    <string name="awakening_rhythm_header">Rhythm</string>
+    <string name="awakening_reset_time">Daily reset</string>
+    <string name="awakening_wake_time">Your day starts</string>
+    <string name="awakening_quiet_start">Quiet hours from</string>
+    <string name="awakening_quiet_end">Quiet hours until</string>
+    <string name="awakening_rest_days">Rest days</string>
+    <string name="awakening_rest_days_needed">Choose at least one rest day.</string>
+    <string name="awakening_lights_out_note">Lights-out quests are set 7 h before your day starts.</string>
+    <string name="awakening_earlier">Earlier: %1$s</string>
+    <string name="awakening_later">Later: %1$s</string>
+
+    <string name="awakening_confirm_header">Measurement complete</string>
+    <string name="awakening_confirm_prompt">Your starting attributes, judged against your own goals.</string>
+    <string name="awakening_saving">Recording…</string>
+</resources>

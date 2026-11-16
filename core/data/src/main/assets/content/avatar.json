@@ -1,0 +1,27 @@
+{
+  "v": 1,
+  "auras": {
+    "E": "FAINT_GREY_BLUE",
+    "D": "SYSTEM_BLUE",
+    "C": "GLOW_CYAN",
+    "B": "ARCANE_VIOLET",
+    "A": "LEGEND_GOLD",
+    "S": "WHITE_BLUE_BLAZE",
+    "SIGMA": "INVERTED_GOLD"
+  },
+  "cloaks": ["long_split", "layered_short", "heavy_shouldered", "plain_wrap", "travel_hooded", "panelled"],
+  "sigils": ["circle_bisected", "nested_circles", "triangle_in_circle", "point_and_ring", "crossing_paths", "six_points"],
+  "classLayers": {
+    "theorist": {"cloak": "long_split", "sigil": "circle_bisected"},
+    "computationalist": {"cloak": "layered_short", "sigil": "nested_circles"},
+    "vanguard": {"cloak": "heavy_shouldered", "sigil": "triangle_in_circle"},
+    "ascetic": {"cloak": "plain_wrap", "sigil": "point_and_ring"},
+    "wanderer": {"cloak": "travel_hooded", "sigil": "crossing_paths"},
+    "polymath": {"cloak": "panelled", "sigil": "six_points"}
+  },
+  "particleBase": 8,
+  "particlePerLevels": 2,
+  "particleMax": 60,
+  "ringPerLevels": 10,
+  "ringMax": 10
+}

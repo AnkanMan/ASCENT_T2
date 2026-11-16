@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug builds only: the debug panel (Phase 4 Task 12). Never in release. -->
+<resources>
+    <string name="debug_header">Debug</string>
+    <string name="debug_open">Open the debug panel</string>
+    <string name="debug_back">Back</string>
+    <string name="debug_note">Debug build only. Changes write straight to your save.</string>
+    <string name="debug_player">Player</string>
+    <string name="debug_level">Level</string>
+    <string name="debug_level_up">Level +%1$d</string>
+    <string name="debug_rank">Rank</string>
+    <string name="debug_mp">MP</string>
+    <string name="debug_of">%1$d / %2$d</string>
+    <string name="debug_mp_fill">Fill MP</string>
+    <string name="debug_mp_empty">Empty MP</string>
+    <string name="debug_stats">Stats</string>
+    <string name="debug_stat_lower">Lower %1$s by 5</string>
+    <string name="debug_stat_raise">Raise %1$s by 5</string>
+    <string name="debug_grants">Grants</string>
+    <string name="debug_skill_points">Unspent skill points</string>
+    <string name="debug_free_points">Free attribute points</string>
+    <string name="debug_essence">Essence</string>
+    <string name="debug_respec_tokens">Respec tokens</string>
+    <string name="debug_grant_skill_point">+1 skill point</string>
+    <string name="debug_grant_free_points">+3 free points</string>
+    <string name="debug_grant_essence">+50 Essence</string>
+    <string name="debug_grant_token">+1 respec token</string>
+    <string name="debug_progression">Progression</string>
+    <string name="debug_class">Class</string>
+    <string name="debug_trial">Rank trial</string>
+    <string name="debug_trial_open">Open</string>
+    <string name="debug_none">None</string>
+    <string name="debug_offer_class">Offer class re-choice</string>
+    <string name="debug_clear_trial">Clear the rank trial</string>
+    <string name="debug_time">Time</string>
+    <string name="debug_game_day">Game day</string>
+    <string name="debug_offset">Clock ahead by</string>
+    <string name="debug_days">%1$d days</string>
+    <string name="debug_forward_day">+1 day</string>
+    <string name="debug_forward_week">+1 week</string>
+    <string name="debug_forward_note">Fast-forward can\'t be undone: the clock only moves ahead. Reinstall the debug build to start over.</string>
+</resources>

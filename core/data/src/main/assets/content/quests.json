@@ -1,0 +1,18 @@
+{
+  "v": 1,
+  "penalty": [
+    {"id": "penalty_walk_note", "realm": "BODY", "stat": "AGI", "tier": "EASY", "title": "A 15-minute walk, then one line on what got in the way", "target": 15, "unit": "min"},
+    {"id": "penalty_clear_desk", "realm": "SELF", "stat": "WIS", "tier": "EASY", "title": "Ten minutes clearing your desk, then one line on tomorrow's first step", "target": 10, "unit": "min"},
+    {"id": "penalty_breathing_note", "realm": "SELF", "stat": "VIT", "tier": "EASY", "title": "Five minutes of slow breathing, then one line on what got in the way", "target": 5, "unit": "min"},
+    {"id": "penalty_three_priorities", "realm": "MIND", "stat": "FOC", "tier": "EASY", "title": "Write tomorrow's three priorities, one line each", "target": 1, "unit": "done"}
+  ],
+  "emergency": [
+    {"id": "emergency_focus_block", "realm": "MIND", "stat": "INT", "tier": "NORMAL", "title": "Within 2 h: 45 minutes of focused work on your nearest deadline", "target": 45, "unit": "min"},
+    {"id": "emergency_check_step", "realm": "MIND", "stat": "INT", "tier": "NORMAL", "title": "Within 2 h: check one step of an open derivation", "target": 1, "unit": "done"},
+    {"id": "emergency_brisk_walk", "realm": "BODY", "stat": "AGI", "tier": "EASY", "title": "Within 2 h: a 20-minute brisk walk", "target": 20, "unit": "min"},
+    {"id": "emergency_mobility", "realm": "BODY", "stat": "AGI", "tier": "EASY", "title": "Within 2 h: 10 minutes of mobility", "target": 10, "unit": "min"},
+    {"id": "emergency_reach_out", "realm": "SELF", "stat": "WIS", "tier": "EASY", "title": "Within 2 h: message a friend or family member", "target": 1, "unit": "done"},
+    {"id": "emergency_daylight", "realm": "SELF", "stat": "VIT", "tier": "EASY", "title": "Within 2 h: 15 minutes outside in daylight", "target": 15, "unit": "min"},
+    {"id": "emergency_read", "realm": "SELF", "stat": "WIS", "tier": "EASY", "title": "Within 2 h: read 10 pages", "target": 10, "unit": "pages"}
+  ]
+}

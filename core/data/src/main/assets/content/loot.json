@@ -1,0 +1,33 @@
+{
+  "v": 1,
+  "tables": {
+    "SIDE_QUEST": {"rollChance": 0.10, "weights": {"COMMON": 80, "RARE": 18, "EPIC": 2, "LEGENDARY": 0, "MYTHIC": 0}},
+    "EMERGENCY":  {"rollChance": 0.20, "weights": {"COMMON": 0, "RARE": 85, "EPIC": 15, "LEGENDARY": 0, "MYTHIC": 0}},
+    "CHEST_ED":   {"rollChance": 1.0, "weights": {"COMMON": 60, "RARE": 32, "EPIC": 8, "LEGENDARY": 0, "MYTHIC": 0}},
+    "CHEST_CB":   {"rollChance": 1.0, "weights": {"COMMON": 30, "RARE": 45, "EPIC": 22, "LEGENDARY": 3, "MYTHIC": 0}},
+    "CHEST_AS":   {"rollChance": 1.0, "weights": {"COMMON": 10, "RARE": 40, "EPIC": 38, "LEGENDARY": 12, "MYTHIC": 0}},
+    "BOSS":       {"rollChance": 1.0, "weights": {"COMMON": 0, "RARE": 0, "EPIC": 70, "LEGENDARY": 30, "MYTHIC": 0}},
+    "RAID":       {"rollChance": 1.0, "weights": {"COMMON": 0, "RARE": 0, "EPIC": 0, "LEGENDARY": 50, "MYTHIC": 50}}
+  },
+  "rarities": {
+    "COMMON":    {"minAffixes": 1, "maxAffixes": 1, "maxPerAffix": 0.03, "essence": 1},
+    "RARE":      {"minAffixes": 1, "maxAffixes": 2, "maxPerAffix": 0.05, "essence": 3},
+    "EPIC":      {"minAffixes": 2, "maxAffixes": 2, "maxPerAffix": 0.08, "essence": 10},
+    "LEGENDARY": {"minAffixes": 2, "maxAffixes": 2, "maxPerAffix": 0.10, "essence": 30},
+    "MYTHIC":    {"minAffixes": 2, "maxAffixes": 2, "maxPerAffix": 0.12}
+  },
+  "rollingAffixes": ["XP_REALM", "MASTERY_STAT", "CRIT", "STREAK_CAP", "HP_REGEN", "GATE_REWARD", "CHEST_LUCK"],
+  "prefixes": ["Ballistic", "Diffusive", "Ergodic", "Adiabatic", "Hydrodynamic", "Integrable", "Conserved"],
+  "bases": {
+    "WEAPON": ["Blade", "Stylus"],
+    "HEAD": ["Cowl", "Visor"],
+    "BODY": ["Cloak", "Mantle"],
+    "HANDS": ["Gauntlets", "Grips"],
+    "FEET": ["Boots", "Treads"],
+    "ACCESSORY": ["Ring", "Sigil"]
+  },
+  "upgradeCosts": [5, 10, 20, 40, 80],
+  "upgradeStep": 0.2,
+  "namedChance": 0.25,
+  "caps": {"xpPerRealm": 0.30, "critTotal": 0.25}
+}

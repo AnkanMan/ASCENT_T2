@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Android Auto Backup, Android 11 and earlier: the same files as data_extraction_rules.xml.
+   The game database and settings only; never the device-local backup bookkeeping
+   (ascent_backup) or the backup work folder.
+-->
+<full-backup-content>
+    <include domain="database" path="ascent.db" />
+    <include domain="database" path="ascent.db-wal" />
+    <include domain="file" path="datastore/ascent_settings.preferences_pb" />
+</full-backup-content>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108">
+<defs><radialGradient id="bg" cx="54" cy="46" r="64" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#123466"/><stop offset="1" stop-color="#04060C"/></radialGradient></defs>
+<rect width="108" height="108" fill="url(#bg)"/>
+<path d="M54,28 L76.517,41 L76.517,67 L54,80 L31.483,67 L31.483,41 Z" fill="none" stroke="#2E8BFF" stroke-opacity="0.1" stroke-width="7.0" stroke-linejoin="round" stroke-linecap="butt" stroke-miterlimit="10"/>
+<path d="M54,28 L76.517,41 L76.517,67 L54,80 L31.483,67 L31.483,41 Z" fill="none" stroke="#2E8BFF" stroke-opacity="0.22" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="butt" stroke-miterlimit="10"/>
+<path d="M54,28 L76.517,41 L76.517,67 L54,80 L31.483,67 L31.483,41 Z" fill="none" stroke="#2E8BFF" stroke-opacity="1.0" stroke-width="2.6" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10"/>
+<path d="M54,28 L76.517,41 L76.517,67 L54,80 L31.483,67 L31.483,41 Z" fill="none" stroke="#A9D4FF" stroke-opacity="0.85" stroke-width="0.9" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10"/>
+<path d="M41.5,69 L54,49 L66.5,69" fill="none" stroke="#00D4FF" stroke-opacity="0.12" stroke-width="8.0" stroke-linejoin="round" stroke-linecap="butt" stroke-miterlimit="10"/>
+<path d="M41.5,69 L54,49 L66.5,69" fill="none" stroke="#00D4FF" stroke-opacity="0.3" stroke-width="5.0" stroke-linejoin="round" stroke-linecap="butt" stroke-miterlimit="10"/>
+<path d="M41.5,69 L54,49 L66.5,69" fill="none" stroke="#00D4FF" stroke-opacity="1.0" stroke-width="3.2" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10"/>
+<path d="M41.5,69 L54,49 L66.5,69" fill="none" stroke="#E8FBFF" stroke-opacity="1.0" stroke-width="1.2" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10"/>
+<path d="M54,36.3 L57.2,39.5 L54,42.7 L50.8,39.5 Z" fill="none" stroke="#00D4FF" stroke-opacity="0.35" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="butt" stroke-miterlimit="10"/>
+<path d="M54,36.3 L57.2,39.5 L54,42.7 L50.8,39.5 Z" fill="#E8FBFF" fill-opacity="1.0"/>
+</svg>

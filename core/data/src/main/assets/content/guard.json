@@ -1,0 +1,7 @@
+{
+  "v": 1,
+  "freeSlots": 3,
+  "decay": 0.5,
+  "floor": 0.1,
+  "slots": {"TRIVIAL": 1, "EASY": 1, "NORMAL": 1, "HARD": 2, "EXTREME": 3}
+}

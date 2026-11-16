@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="skills_header">Skill trees</string>
+    <string name="skills_points">Skill points</string>
+    <string name="skills_hint">Drag to move, pinch to zoom. Tap a node for details.</string>
+    <string name="skills_tree_body">Body</string>
+    <string name="skills_tree_mind">Mind</string>
+    <string name="skills_tree_self">Self</string>
+    <string name="skills_tree_observer">Observer</string>
+    <string name="skills_tree_class">Class</string>
+    <string name="skills_reset_view">Reset view</string>
+
+    <string name="skills_respec">Respec</string>
+    <string name="skills_respec_token">Respec (free: a respec token)</string>
+    <string name="skills_respec_essence">Respec (%1$d Essence)</string>
+    <string name="skills_respec_cannot">Respec needs a token or %1$d Essence</string>
+    <string name="skills_respec_confirm_title">Return every skill point?</string>
+    <string name="skills_respec_confirm_text">All tree skills are locked again and their points come back. Cooldowns and uses this period stay as they are. Class skills are kept.</string>
+    <string name="skills_respec_confirm">Respec</string>
+    <string name="skills_cancel">Cancel</string>
+
+    <string name="skills_kind_passive">Passive</string>
+    <string name="skills_kind_active">Active</string>
+    <string name="skills_kind_ultimate">Ultimate</string>
+    <string name="skills_tier">Tier %1$d</string>
+    <string name="skills_state_unlocked">Unlocked</string>
+    <string name="skills_state_ready">Ready to unlock</string>
+    <string name="skills_state_ready_short">Ready</string>
+    <string name="skills_state_locked">Locked</string>
+    <string name="skills_observer_hint">A-rank</string>
+    <string name="skills_node_description">%1$s, %2$s</string>
+
+    <string name="skills_cost_mp">%1$d MP</string>
+    <string name="skills_cost_free">No MP</string>
+    <string name="skills_limit_day">Once a day</string>
+    <string name="skills_limit_week">Once a week</string>
+    <string name="skills_limit_month">Once a month</string>
+    <string name="skills_limit_hours">Cooldown %1$d h (FOC shortens it)</string>
+    <string name="skills_limit_insight">1 + WIS / %1$d charges a day</string>
+    <string name="skills_automatic">Triggers by itself on a matching quest</string>
+
+    <string name="skills_need_point">Needs 1 skill point</string>
+    <string name="skills_need_prerequisite">Needs %1$s first</string>
+    <string name="skills_need_gate">Needs %1$s or %2$s at %3$d (best now %4$d)</string>
+    <string name="skills_need_boss">Needs one boss defeated</string>
+    <string name="skills_need_locked">Can\'t be learned yet</string>
+
+    <string name="skills_unlock">Unlock (1 point)</string>
+    <string name="skills_cast">Cast</string>
+    <string name="skills_cast_confirm">Confirm: %1$s</string>
+    <string name="skills_cast_ready">Ready to cast</string>
+    <string name="skills_cast_no_mp">Needs %1$d MP (you have %2$d)</string>
+    <string name="skills_cast_used_day">Used today</string>
+    <string name="skills_cast_used_week">Used this week</string>
+    <string name="skills_cast_used_month">Used this month</string>
+    <string name="skills_cast_cooldown_hours">Ready in %1$d h %2$d min</string>
+    <string name="skills_cast_cooldown_minutes">Ready in %1$d min</string>
+    <string name="skills_cast_needs_target">Cast it on a quest from the Quests tab</string>
+    <string name="skills_cast_rest_day">Not on rest days</string>
+    <string name="skills_cast_no_headroom">No room under the weekly cap</string>
+    <string name="skills_cast_no_miss">Only the day after a missed Daily the Shield didn\'t cover</string>
+    <string name="skills_cast_not_unlocked">Not unlocked</string>
+    <string name="skills_cast_not_ready">Not available yet</string>
+
+    <string name="skills_share_chooser">Send to the System</string>
+    <string name="skills_ask_which">Ask the System which one</string>
+    <string name="skills_clarity_title">Clarity</string>
+    <string name="skills_clarity_moved">What moved</string>
+    <string name="skills_clarity_stuck">What’s stuck</string>
+    <string name="skills_clarity_next">Tomorrow’s one thing</string>
+    <string name="skills_clarity_note">Stays on this phone and is never shared. Up to three quests for tomorrow come from the last line (separate them with commas).</string>
+    <string name="skills_insight_title">Insight</string>
+    <string name="skills_insight_problem">The stuck problem</string>
+    <string name="skills_insight_note">Shared with your status so Claude can split it into three sub-quests. Bring them back with Import.</string>
+
+    <string name="focus_header">Focus session</string>
+    <string name="focus_remaining_description">%1$d minutes left</string>
+    <string name="focus_done_short">90:00</string>
+    <string name="focus_complete">Full session. Double XP, and double INT mastery on an INT quest.</string>
+    <string name="focus_claim">Claim</string>
+    <string name="focus_end_early">End early</string>
+    <string name="focus_end_title">End the session now?</string>
+    <string name="focus_end_text">The minutes count, without the bonus. The MP isn’t refunded.</string>
+    <string name="focus_end_confirm">End now</string>
+    <string name="focus_keep_going">Keep going</string>
+    <string name="focus_dnd_title">Do Not Disturb during sessions?</string>
+    <string name="focus_dnd_text">ASCENT can turn Do Not Disturb on while a session runs and restore it after. Android asks you to allow this in Settings. Sessions work the same without it.</string>
+    <string name="focus_dnd_allow">Open Settings</string>
+    <string name="focus_dnd_later">Not now</string>
+
+    <string name="class_awakening_header">Class awakening</string>
+    <string name="class_rechoice_header">Class re-choice</string>
+    <string name="class_awakening_intro">Your two highest stats have ignited. Choose the class the Observer will record.</string>
+    <string name="class_rechoice_intro">A new rank. Keep your class, or take one from your stats as they are now.</string>
+    <string name="class_columns_description">Your stats: %1$s</string>
+    <string name="class_bonus">+10%% XP and mastery on %1$s</string>
+    <string name="class_bonus_polymath">Resonance: +5%% XP per realm done today, up to +15%%</string>
+    <string name="class_current">Your current class</string>
+    <string name="class_pick">Choose a class</string>
+    <string name="class_take">Awaken as %1$s</string>
+    <string name="class_keep">Keep %1$s</string>
+    <string name="class_later">Later</string>
+
+    <string name="cast_derivation_name">Name the derivation</string>
+    <string name="cast_parallel_pick">Link with</string>
+    <string name="cast_header">Cast</string>
+    <string name="cast_pick_header">Powers</string>
+    <string name="cast_none">No power you hold can be cast on this.</string>
+    <string name="cast_on">Target: %1$s</string>
+    <string name="cast_new_target">New target: %1$s</string>
+    <string name="cast_confirm">Cast</string>
+    <string name="cast_cancel">Cancel</string>
+
+    <string name="skills_msg_unlocked">Acquired: %1$s</string>
+    <string name="skills_msg_cast">Cast %1$s (%2$d MP)</string>
+    <string name="skills_msg_respecced">%1$d points returned</string>
+    <string name="skills_msg_respec_failed">Respec not possible right now</string>
+</resources>

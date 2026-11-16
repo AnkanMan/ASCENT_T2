@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="codex_back">Status</string>
+    <string name="codex_achievements">Achievements</string>
+    <string name="codex_titles">Titles</string>
+    <string name="codex_wear">Wear</string>
+    <string name="codex_wearing">Worn</string>
+    <string name="codex_lore">The Record</string>
+    <string name="codex_no_lore">Nothing recorded yet.</string>
+    <string name="codex_hidden">A hidden condition. It reveals itself when met.</string>
+    <string name="codex_progress">%1$s / %2$s</string>
+    <string name="codex_recorded">%1$d of %2$d recorded</string>
+    <string name="codex_filter_all">All</string>
+    <string name="codex_unread_description">New record: %1$s</string>
+    <string name="codex_mark_read">Mark as read</string>
+    <string name="codex_cat_world">World</string>
+    <string name="codex_cat_ranks">Ranks</string>
+    <string name="codex_cat_classes">Classes</string>
+    <string name="codex_cat_skills">Skills</string>
+    <string name="codex_cat_arcs">Arcs</string>
+    <string name="codex_cat_bosses">Bosses</string>
+    <string name="codex_cat_gates">Gates</string>
+    <string name="codex_cat_achievements">Achievements</string>
+</resources>

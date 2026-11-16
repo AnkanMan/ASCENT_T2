@@ -1,0 +1,34 @@
+{
+  "v": 1,
+  "days": 7,
+  "objectivesPerRealm": 2,
+  "retryDays": 7,
+  "respecTokens": 1,
+  "trials": [
+    {"rank": "D", "level": 10, "effort": 0.20, "chest": "CHEST_ED"},
+    {"rank": "C", "level": 25, "effort": 0.35, "chest": "CHEST_CB"},
+    {"rank": "B", "level": 45, "effort": 0.50, "chest": "CHEST_CB"},
+    {"rank": "A", "level": 70, "effort": 0.70, "chest": "CHEST_AS"},
+    {"rank": "S", "level": 100, "effort": 1.00, "chest": "CHEST_AS"}
+  ],
+  "objectives": {
+    "BODY": [
+      {"title": "Push-ups across your strength sessions", "unit": "reps", "templates": ["body_push_ups", "body_incline_push_ups"], "sessions": 2},
+      {"title": "Squats and lunges", "unit": "reps", "templates": ["body_squats", "body_lunges"], "sessions": 2},
+      {"title": "Steps", "unit": "steps", "templates": ["body_steps"], "sessions": 3},
+      {"title": "Mobility or stretch sessions", "unit": "sessions", "templates": ["body_mobility", "body_stretch"], "perWeek": 2}
+    ],
+    "MIND": [
+      {"title": "Deep-work minutes", "unit": "min", "templates": ["mind_deep_work", "mind_phone_free_block"], "sessions": 5},
+      {"title": "Read a paper and write a 3-line summary", "unit": "papers", "templates": ["mind_paper_summary"], "perWeek": 3},
+      {"title": "Clean derivation pages", "unit": "pages", "templates": ["mind_derivation_page"], "perWeek": 3},
+      {"title": "Simulation runs or sweeps", "unit": "runs", "templates": ["mind_simulation_run"], "perWeek": 2}
+    ],
+    "SELF": [
+      {"title": "Pages read", "unit": "pages", "templates": ["self_reading"], "sessions": 4},
+      {"title": "Lights out on time", "unit": "nights", "templates": ["self_lights_out"], "perWeek": 6},
+      {"title": "Three-line journal", "unit": "entries", "templates": ["self_journal"], "perWeek": 4},
+      {"title": "Breathing or meditation", "unit": "sessions", "templates": ["self_breathing"], "perWeek": 3}
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Phase 3: side, penalty and emergency quests, and arcs. -->
+<resources>
+    <string name="quests_save">Add</string>
+    <string name="quests_cancel">Cancel</string>
+    <string name="quests_forbidden">The System does not issue fasting, calorie or weight-loss quests.</string>
+    <string name="quests_tab_arcs">Arcs</string>
+    <string name="quests_penalty_header">Warning — penalty</string>
+    <string name="quests_emergency_header">Emergency</string>
+    <string name="quests_emergency_left">%1$d h %2$02d min left</string>
+    <plurals name="quests_side_days_left">
+        <item quantity="one">%d day left</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
+    <string name="quests_side_header">Side quests</string>
+    <string name="quests_side_note">Optional, 0.75× XP, a chance of loot. They expire quietly.</string>
+    <string name="quests_add_bounty">Bounty</string>
+    <string name="quests_bounty_title">New bounty</string>
+    <string name="quests_bounty_label">Errand (emails, admin, chores)</string>
+    <string name="quests_bounty_note">Self, easy, open for 3 days.</string>
+    <string name="quests_bounty_refused">Three side quests are open, or that wording is not allowed.</string>
+
+    <string name="arcs_none">No arcs yet. Start a template or add your own.</string>
+    <string name="arcs_backlog">Backlog</string>
+    <string name="arcs_activate">Make active</string>
+    <string name="arcs_templates">Arc templates</string>
+    <plurals name="arcs_chapters">
+        <item quantity="one">%d chapter</item>
+        <item quantity="other">%d chapters</item>
+    </plurals>
+    <string name="arcs_start">Start</string>
+    <string name="arcs_add">Arc</string>
+    <string name="arcs_progress">%1$d / %2$d chapters</string>
+    <string name="arcs_finale_boss">Finale: boss %1$s</string>
+    <string name="arcs_finale_title">Finale: the title %1$s</string>
+    <string name="arcs_finale_trial">Finale: a Trial against your record</string>
+    <string name="arcs_complete_chapter">Complete chapter</string>
+    <string name="arcs_linked">Fed by: %1$s</string>
+    <string name="arcs_log_minus">Take one back from %1$s</string>
+    <string name="arcs_log_plus">Log one for %1$s</string>
+    <string name="arcs_link_goal">Link a goal</string>
+    <string name="arcs_form_title">New arc</string>
+    <string name="arcs_form_name">Arc name</string>
+    <string name="arcs_form_chapters">Chapters, one per line</string>
+    <string name="arcs_form_finale_none">No finale</string>
+    <string name="arcs_form_finale_boss">Boss</string>
+    <string name="arcs_form_finale_title">Title</string>
+    <string name="arcs_form_finale_name">Boss or title name</string>
+    <string name="arcs_form_count_warning">Arcs usually have 3–6 chapters. You can add more later.</string>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_back">Status</string>
+    <string name="inventory_equipped">Equipped</string>
+    <string name="inventory_items">Items</string>
+    <string name="inventory_none">No items yet. Chests, bosses, side and emergency quests drop them.</string>
+    <string name="inventory_empty_slot">Empty</string>
+    <string name="inventory_essence">Essence %1$d</string>
+    <string name="inventory_set">set: %1$s</string>
+    <string name="inventory_replaces">Replaces: %1$s</string>
+    <string name="inventory_source">From %1$s</string>
+    <string name="inventory_upgrade">Upgrade to +%1$d (%2$d Essence)</string>
+    <string name="inventory_dismantle">Dismantle for %1$d Essence</string>
+    <string name="inventory_equip">Equip</string>
+    <string name="inventory_unequip">Unequip</string>
+    <string name="inventory_close">Close</string>
+    <string name="inventory_dormant">Dormant until Phase 4</string>
+
+    <string name="affix_xp">+%1$s%% %2$s XP</string>
+    <string name="affix_mastery">+%1$s%% %2$s mastery</string>
+    <string name="affix_crit">+%1$s%% critical chance</string>
+    <string name="affix_streak">Streak bonus cap %1$s×</string>
+    <string name="affix_regen">%1$s%% HP restored at each reset</string>
+    <string name="affix_gate">+%1$s%% %2$s Gate XP</string>
+    <string name="affix_luck">%1$s%% chance a roll comes up one rarity higher</string>
+
+    <string name="slot_weapon">Weapon</string>
+    <string name="slot_head">Head</string>
+    <string name="slot_body">Body</string>
+    <string name="slot_hands">Hands</string>
+    <string name="slot_feet">Feet</string>
+    <string name="slot_accessory">Accessory</string>
+    <string name="slot_accessory_1">Accessory I</string>
+    <string name="slot_accessory_2">Accessory II</string>
+
+    <string name="rarity_common">Common</string>
+    <string name="rarity_rare">Rare</string>
+    <string name="rarity_epic">Epic</string>
+    <string name="rarity_legendary">Legendary</string>
+    <string name="rarity_mythic">Mythic</string>
+    <string name="inventory_avatar_description">Your avatar wearing its equipped gear</string>
+</resources>

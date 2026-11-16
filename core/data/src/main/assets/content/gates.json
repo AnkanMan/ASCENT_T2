@@ -1,0 +1,70 @@
+{
+  "v": 1,
+  "gates": [
+    {"id": "iron_week", "realm": "BODY", "title": "Iron Week", "days": 7,
+     "lore": "A fluctuation that rewards load carried, not load imagined.",
+     "objectives": [
+       {"title": "Push-ups across your strength sessions", "unit": "reps", "templates": ["body_push_ups", "body_incline_push_ups"], "sessions": 2},
+       {"title": "Squats and lunges", "unit": "reps", "templates": ["body_squats", "body_lunges"], "sessions": 2},
+       {"title": "Mobility or stretch sessions", "unit": "sessions", "templates": ["body_mobility", "body_stretch"], "perWeek": 2}
+     ]},
+    {"id": "long_walk", "realm": "BODY", "title": "The Long Walk", "days": 5,
+     "lore": "The lattice is crossed one site at a time. This Gate counts every one.",
+     "objectives": [
+       {"title": "Steps", "unit": "steps", "templates": ["body_steps"], "sessions": 3},
+       {"title": "Brisk or easy walks", "unit": "walks", "templates": ["body_brisk_walk", "body_easy_walk"], "perWeek": 3},
+       {"title": "Mobility or stretch sessions", "unit": "sessions", "templates": ["body_mobility", "body_stretch"], "perWeek": 2}
+     ]},
+    {"id": "core_lattice", "realm": "BODY", "title": "The Core Lattice", "days": 5,
+     "lore": "Everything else bends around the centre. Hold it.",
+     "objectives": [
+       {"title": "Plank holds", "unit": "s", "templates": ["body_plank"], "sessions": 2},
+       {"title": "Glute bridges", "unit": "reps", "templates": ["body_glute_bridges"], "sessions": 2},
+       {"title": "Mobility or stretch sessions", "unit": "sessions", "templates": ["body_mobility", "body_stretch"], "perWeek": 2}
+     ]},
+
+    {"id": "literature_abyss", "realm": "MIND", "title": "The Literature Abyss", "days": 7,
+     "lore": "Every paper is a fluctuation someone else survived. Read what they left.",
+     "objectives": [
+       {"title": "Read a paper and write a 3-line summary", "unit": "papers", "templates": ["mind_paper_summary"], "perWeek": 3},
+       {"title": "Deep-work blocks", "unit": "blocks", "templates": ["mind_deep_work", "mind_phone_free_block"], "perWeek": 4},
+       {"title": "Sharpen one entry in QUESTIONS.md", "unit": "entries", "perWeek": 2}
+     ]},
+    {"id": "clean_code_crypt", "realm": "MIND", "title": "The Clean Code Crypt", "days": 5,
+     "lore": "Old scripts hold old errors. Bring them into the light and name them.",
+     "objectives": [
+       {"title": "Simulation runs or sweeps", "unit": "runs", "templates": ["mind_simulation_run"], "perWeek": 2},
+       {"title": "Research log entries", "unit": "entries", "templates": ["mind_research_log"], "perWeek": 3},
+       {"title": "TODO items closed", "unit": "items", "templates": ["mind_close_todo"], "perWeek": 3}
+     ]},
+    {"id": "derivation_spiral", "realm": "MIND", "title": "The Derivation Spiral", "days": 7,
+     "lore": "Each page narrows the spiral. At its centre, the result waits.",
+     "objectives": [
+       {"title": "Clean derivation pages", "unit": "pages", "templates": ["mind_derivation_page"], "perWeek": 3},
+       {"title": "Deep-work minutes", "unit": "min", "templates": ["mind_deep_work"], "sessions": 4},
+       {"title": "Tomorrow planned tonight", "unit": "plans", "templates": ["mind_plan_tomorrow"], "perWeek": 4}
+     ]},
+
+    {"id": "silence_protocol", "realm": "SELF", "title": "Silence Protocol", "days": 5,
+     "lore": "Noise is the cheapest state. Silence costs something, and pays more.",
+     "objectives": [
+       {"title": "Phone-free first hour", "unit": "mornings", "templates": ["self_phone_free_morning"], "perWeek": 5},
+       {"title": "Screens off before bed", "unit": "nights", "templates": ["self_screens_off"], "perWeek": 4},
+       {"title": "Breathing or meditation", "unit": "sessions", "templates": ["self_breathing"], "perWeek": 3}
+     ]},
+    {"id": "dawn_gate", "realm": "SELF", "title": "Dawn Gate", "days": 7,
+     "lore": "The first hour sets the boundary condition. This Gate opens only at dawn.",
+     "objectives": [
+       {"title": "Lights out on time", "unit": "nights", "templates": ["self_lights_out"], "perWeek": 6},
+       {"title": "Daylight soon after waking", "unit": "mornings", "templates": ["self_daylight"], "perWeek": 4},
+       {"title": "Up at your wake time", "unit": "mornings", "perWeek": 5}
+     ]},
+    {"id": "reading_vigil", "realm": "SELF", "title": "The Reading Vigil", "days": 7,
+     "lore": "Other minds, other lattices. Visit them on purpose.",
+     "objectives": [
+       {"title": "Pages read", "unit": "pages", "templates": ["self_reading"], "sessions": 4},
+       {"title": "Three-line journal", "unit": "entries", "templates": ["self_journal"], "perWeek": 4},
+       {"title": "Message someone you care about", "unit": "messages", "templates": ["self_message_someone"], "perWeek": 2}
+     ]}
+  ]
+}

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gates_open">Open Gates</string>
+    <string name="gates_none_open">No Gate is open. Accept one from the board.</string>
+    <string name="gates_board">This week\'s board</string>
+    <string name="gates_board_note">A new board appears at each Sunday reset. Your normal quests count toward a Gate; log the rest by hand.</string>
+    <string name="gates_board_empty">No offers left this week.</string>
+    <string name="gates_accept">Accept</string>
+    <string name="gates_decline">Decline</string>
+    <string name="gates_limit">Two Gates are already open.</string>
+    <string name="gates_red">Red Gate · all or nothing</string>
+    <plurals name="gates_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="gates_days_left">
+        <item quantity="one">%d day left</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
+    <string name="gates_xp">%1$d XP</string>
+    <string name="gates_percent">%1$d%% cleared</string>
+    <string name="gates_auto">Counts your matching quests</string>
+    <string name="gates_manual">Logged by hand</string>
+    <string name="gates_log_description">Log one for %1$s</string>
+    <string name="gates_recent">Recent Gates</string>
+    <string name="gates_status_cleared">cleared</string>
+    <string name="gates_status_partial">partly cleared</string>
+    <string name="gates_status_broken">broken</string>
+    <string name="gates_status_failed">failed</string>
+    <string name="gates_status_open">open</string>
+    <string name="gates_realm_body">Body</string>
+    <string name="gates_realm_mind">Mind</string>
+    <string name="gates_realm_self">Self</string>
+
+    <string name="gates_bosses">Bosses</string>
+    <string name="gates_no_bosses">No boss yet. Name a milestone, or let Claude break one down.</string>
+    <string name="gates_add_boss">Boss</string>
+    <string name="gates_enter_arena">Enter the arena</string>
+    <string name="gates_trials">Trials</string>
+    <string name="gates_trials_note">One session against your own record. At most one attempt every 4 weeks.</string>
+    <string name="gates_open_trial">Open a Trial: %1$s</string>
+    <string name="gates_trial_record">Record to beat: %1$s</string>
+    <string name="gates_trial_open">An attempt is open.</string>
+    <string name="gates_trial_waiting">Reopens later.</string>
+    <string name="trial_push_ups">push-ups</string>
+    <string name="trial_squats">squats</string>
+    <string name="trial_plank">plank (s)</string>
+
+    <string name="boss_hp">HP</string>
+    <string name="boss_phase_name">phase: %1$s</string>
+    <string name="boss_raid">raid</string>
+    <string name="boss_enraged" formatted="false">Past the deadline: rewards −25%</string>
+    <plurals name="boss_deadline_days">
+        <item quantity="one">%d day to the deadline</item>
+        <item quantity="other">%d days to the deadline</item>
+    </plurals>
+    <string name="boss_form_title">New boss</string>
+    <string name="boss_form_name">Milestone</string>
+    <string name="boss_form_deadline">Deadline (YYYY-MM-DD, optional)</string>
+    <string name="boss_form_phase">First phase name</string>
+    <string name="boss_form_raid">Raid (multi-month)</string>
+    <string name="boss_form_note">Add tasks with hour estimates in the arena. Damage is 100 per hour.</string>
+    <string name="boss_form_limit">Two bosses and one raid are already active.</string>
+    <string name="boss_form_forbidden">That wording is not allowed.</string>
+    <string name="boss_form_save">Add</string>
+    <string name="boss_form_cancel">Cancel</string>
+
+    <string name="arena_back">Gates</string>
+    <string name="arena_phase">Phase %1$d · %2$s</string>
+    <string name="arena_phase_open">Open</string>
+    <string name="arena_phase_cleared">Cleared</string>
+    <string name="arena_phase_locked">Locked until the phase before it falls</string>
+    <string name="arena_no_tasks">No tasks yet.</string>
+    <string name="arena_add_task">Add task</string>
+    <string name="arena_task_title">Task</string>
+    <string name="arena_task_hours">Estimated hours</string>
+    <string name="arena_task_phase">Phase %1$d: %2$s</string>
+    <string name="arena_new_phase">new phase</string>
+    <string name="arena_damage">%1$d damage</string>
+    <string name="arena_critical">critical</string>
+    <string name="arena_hit">−%1$d HP · +%2$d XP</string>
+    <string name="arena_hit_critical">−%1$d HP · critical +%2$d XP</string>
+    <string name="arena_hit_description">Strike: %1$s, %2$d damage</string>
+    <string name="arena_undo_description">%1$s done. Tap to undo</string>
+    <string name="arena_done_description">%1$s done</string>
+    <string name="arena_status_defeated">Defeated</string>
+    <string name="arena_abandon">Abandon this boss</string>
+    <string name="arena_mark_paper">Mark paper submitted</string>
+    <string name="arena_trial_intro">One session. Beat your record to win; otherwise the Trial reopens in 4 weeks.</string>
+    <string name="arena_trial_last">Last attempt: %1$s</string>
+    <string name="arena_trial_result">Your result</string>
+    <string name="arena_trial_submit">Record attempt</string>
+    <string name="arena_trial_won">Record broken.</string>
+    <string name="arena_trial_wait">The Trial reopens %1$d days after your last attempt.</string>
+    <string name="arena_cast_on">Cast a power on this task</string>
+    <string name="gates_rank_trial">Rank trial · %1$s</string>
+    <string name="gates_trial_done">%1$d/%2$d objectives</string>
+    <string name="gates_trial_note">Complete all six before it closes to rank up. It doesn’t count toward the two open Gates. A miss costs nothing but a 7-day wait.</string>
+</resources>

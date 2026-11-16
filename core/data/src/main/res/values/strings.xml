@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Player defaults -->
+    <string name="player_starting_title">The Unmeasured</string>
+
+    <!-- Template quest titles (Task 29). Original wording only. -->
+    <string name="template_body_push_ups">Push-ups</string>
+    <string name="template_body_plank">Plank hold</string>
+    <string name="template_body_incline_push_ups">Incline push-ups</string>
+    <string name="template_body_squats">Squats</string>
+    <string name="template_body_lunges">Lunges</string>
+    <string name="template_body_glute_bridges">Glute bridges</string>
+    <string name="template_body_steps">Steps</string>
+    <string name="template_body_brisk_walk">Brisk walk</string>
+    <string name="template_body_mobility">Mobility flow</string>
+    <string name="template_body_easy_walk">Easy recovery walk</string>
+    <string name="template_body_stretch">Gentle full-body stretch</string>
+    <string name="template_mind_deep_work">Deep work on your main project</string>
+    <string name="template_mind_phone_free_block">Phone-away focus block</string>
+    <string name="template_mind_derivation_page">Write one clean page of a derivation</string>
+    <string name="template_mind_paper_summary">Read one paper and write a three-line summary</string>
+    <string name="template_mind_simulation_run">Run one simulation or sweep and save the figure</string>
+    <string name="template_mind_research_log">Add one entry to your research log</string>
+    <string name="template_mind_close_todo">Close one open task or sharpen one open question</string>
+    <string name="template_mind_plan_tomorrow">Write tomorrow\'s top three tasks</string>
+    <string name="quest_derivation">Derivation: %1$s</string>
+    <string name="template_self_lights_out">Lights out by %1$s</string>
+    <string name="template_self_reading">Read</string>
+    <string name="template_self_journal">Write three lines in a journal</string>
+    <string name="template_self_message_someone">Message a friend or family member</string>
+    <string name="template_self_new_skill">Practise a new skill</string>
+    <string name="template_self_water">Glasses of water</string>
+    <string name="template_self_protein">Protein with each main meal</string>
+    <string name="template_self_cook_meal">Cook one real meal</string>
+    <string name="template_self_daylight">Outdoor daylight</string>
+    <string name="template_self_breathing">Breathing or meditation</string>
+    <string name="template_self_screens_off">Screens off 30 minutes before bed</string>
+    <string name="template_self_phone_free_morning">No phone for the first 30 minutes after waking</string>
+
+    <!-- Unit labels stored with quests -->
+    <string name="unit_reps">reps</string>
+    <string name="unit_minutes">min</string>
+    <string name="unit_steps">steps</string>
+    <string name="unit_pages">pages</string>
+    <string name="unit_km">km</string>
+    <string name="unit_seconds">s</string>
+    <string name="unit_hours">h</string>
+    <string name="unit_other">done</string>
+    <string name="unit_glasses">glasses</string>
+
+    <!-- Phase 3: names the app gives -->
+    <string name="boss_default_phase">Phase %1$d</string>
+    <string name="boss_trial_name">Trial: %1$s</string>
+    <string name="title_boss_resolver">Resolver of %1$s</string>
+</resources>

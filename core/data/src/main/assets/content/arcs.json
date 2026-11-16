@@ -1,0 +1,34 @@
+{
+  "v": 1,
+  "arcs": [
+    {"id": "the_rod_gas", "realm": "MIND", "title": "The Rod Gas", "finale": "BOSS", "finaleName": "The Draft",
+     "chapters": [
+       {"title": "Numerical current cumulants", "objectives": [{"title": "Cumulants to 4th order at three densities", "target": 3, "unit": "densities"}]},
+       {"title": "BMFT prediction", "objectives": [{"title": "Derive the BMFT prediction for the cumulants", "target": 1, "unit": "derivations"}]},
+       {"title": "μ∞ convergence checks", "objectives": [{"title": "Convergence checks at three system sizes", "target": 3, "unit": "sizes"}]},
+       {"title": "Figures and comparison", "objectives": [{"title": "Comparison figures", "target": 3, "unit": "figures"}]},
+       {"title": "Draft", "objectives": [{"title": "Draft sections written", "target": 5, "unit": "sections"}]}
+     ]},
+    {"id": "ring_and_line", "realm": "MIND", "title": "Ring and Line", "finale": "BOSS", "finaleName": "The Write-up",
+     "chapters": [
+       {"title": "Variance on the ring", "objectives": [{"title": "Variance on the ring derived", "target": 1, "unit": "derivations"}]},
+       {"title": "Line limit", "objectives": [{"title": "Line limit taken and checked", "target": 1, "unit": "derivations"}]},
+       {"title": "Numerical checks", "objectives": [{"title": "Numerical checks against the prediction", "target": 3, "unit": "runs"}]},
+       {"title": "Write-up", "objectives": [{"title": "Write-up sections drafted", "target": 4, "unit": "sections"}]}
+     ]},
+    {"id": "iron_discipline", "realm": "BODY", "title": "Iron Discipline", "finale": "TRIAL", "trialTemplate": "body_push_ups",
+     "chapters": [
+       {"title": "Base (weeks 1–4)", "objectives": [{"title": "Strength sessions", "target": 12, "unit": "sessions"}]},
+       {"title": "Build (weeks 5–8)", "objectives": [{"title": "Strength sessions", "target": 12, "unit": "sessions"}]},
+       {"title": "Peak (weeks 9–11)", "objectives": [{"title": "Strength sessions", "target": 9, "unit": "sessions"}]},
+       {"title": "Test (week 12)", "objectives": [{"title": "Deload week completed", "target": 1, "unit": "weeks"}]}
+     ]},
+    {"id": "quiet_hours", "realm": "SELF", "title": "Quiet Hours", "finale": "TITLE", "finaleName": "Keeper of Quiet Hours",
+     "chapters": [
+       {"title": "Fixed wake time", "objectives": [{"title": "Mornings up at your wake time", "target": 14, "unit": "mornings"}]},
+       {"title": "Lights-out target", "objectives": [{"title": "Nights with lights out on time", "target": 14, "unit": "nights"}]},
+       {"title": "Screens off before bed", "objectives": [{"title": "Nights with screens off before bed", "target": 14, "unit": "nights"}]},
+       {"title": "Two consistent weeks", "objectives": [{"title": "Days with wake, lights-out and screens all kept", "target": 14, "unit": "days"}]}
+     ]}
+  ]
+}

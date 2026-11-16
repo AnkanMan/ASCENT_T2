@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Dark window with the Void background so there's no white flash before Compose draws. -->
+    <style name="Theme.ASCENT" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/ascent_void</item>
+    </style>
+</resources>
