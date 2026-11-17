@@ -24,7 +24,7 @@ class HabitStrengthTest {
 
     @Test
     fun `alpha_day is 1 - 0_2^(1 over 30)`() {
-        assertEquals(1.0 - 0.2.pow(1.0 / 30.0), HabitStrength.ALPHA_DAY)
+        assertClose(1.0 - 0.2.pow(1.0 / 30.0), HabitStrength.ALPHA_DAY, 1e-12)
         assertClose(0.05223, HabitStrength.ALPHA_DAY, 1e-5)
         assertClose(0.3131, HabitStrength.ALPHA_WEEK, 1e-4)
         // Both remember about 18.64 days (τ = 30 / ln 5).

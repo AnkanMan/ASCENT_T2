@@ -1851,3 +1851,38 @@ to go on. This is section B.
   - check the Claude free-plan claim (Projects, up to five) at Task 5 and
     the developer-verification dates at Task 8.
 - Next: Release Task 1, identity (after the carried-over checks).
+
+
+## 2026-11-17 — Local debug APK for Android testing
+
+**What changed**
+- Set up Android command-line tools and SDK 37.0 in `/tmp/ascent-android-sdk`,
+  with Gradle dependencies in `/tmp/ascent-build-gradle`; no Android Studio
+  or emulator was needed. These temporary directories may be removed on reboot.
+- Corrected `HabitStrengthTest` to compare the daily alpha formula within
+  `1e-12`, rather than requiring bit-for-bit equality. The two mathematically
+  equivalent calculations differed by about `1.1e-16` on this JVM. Production
+  game formulas and dependency versions are unchanged.
+- Built the signed debug APK at `app/build/outputs/apk/debug/app-debug.apk`
+  and copied it to `build/ASCENT-debug.apk` (about 40 MB).
+- Preserved this build's debug signing key at
+  `.gradle/local-signing/debug.keystore` (gitignored, owner-readable only).
+  Retain this key for compatible future debug updates. To reuse it with the
+  command below after a reboot, restore it to
+  `/tmp/ascent-android-user/debug.keystore` after recreating that directory.
+  This is a development key, not the future release signing key.
+
+**Validation**
+- `ANDROID_HOME=/tmp/ascent-android-sdk ANDROID_USER_HOME=/tmp/ascent-android-user GRADLE_USER_HOME=/tmp/ascent-build-gradle ./gradlew test assembleDebug --no-daemon --max-workers=2 -Dorg.gradle.jvmargs=-Xmx1536m`
+  succeeded: 352 tests, zero failures, errors or skips.
+- `apksigner verify --verbose` passed (APK Signature Scheme v2).
+- APK metadata: `com.tirthankar.ascent`, label ASCENT, version code 1,
+  version name 1.0, minimum API 28 (Android 9), target API 37.
+- SHA-256: `c07416927bfb0dcc810bec2cb99211ce0ba3a212a84442c680e2f80ad8e345af`.
+
+**Open issues**
+- No physical-device install or interaction was performed. On the phone,
+  complete the Awakening, check off a quest, close and reopen the app, and
+  confirm progress persists. The existing phase exit checks remain open.
+- If a differently signed ASCENT is already installed, back up its player
+  data before considering uninstalling it; this debug key may not match.
