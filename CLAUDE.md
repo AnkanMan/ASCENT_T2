@@ -14,6 +14,7 @@ wins — point out the conflict instead of guessing.
 | File | Purpose |
 | --- | --- |
 | `SPEC.md` | Full design: mechanics, numbers, screens, architecture, roadmap |
+| `Phase6.md` | Tomorrow planner and shared task-session rules, tests and build order |
 | `TODO.md` | Checklist for the current phase. One task at a time, in order |
 | `DEVLOG.md` | Append-only session log: what changed, decisions, open issues |
 | `CLAUDE.md` | This file: how to work in this repo |
@@ -59,7 +60,7 @@ adb logcat -s AndroidRuntime     # crash stack traces
 
 Kotlin · Jetpack Compose (Material 3, heavily themed) · single activity +
 Navigation Compose · MVVM with `StateFlow` · Hilt · Room + DataStore ·
-WorkManager · kotlinx.serialization · Health Connect (Phase 6) · Android
+WorkManager · kotlinx.serialization · Health Connect (Phase 7) · Android
 share sheet and clipboard for the Claude bridge (Phase 2). No network
 dependencies.
 
@@ -72,7 +73,7 @@ dependencies.
 :core:designsystem        colour tokens, typography, HoloPanel, animations, sounds
 :integrations:bridge      ASCENT STATUS export, share intent + clipboard import,
                           `ascent` block parsing and validation
-:integrations:health      Health Connect (Phase 6, after the Release)
+:integrations:health      Health Connect (Phase 7, after the Release)
 :feature:<name>           one module per screen group: status, quests, console,
                           gates, inventory, skills, codex, assessment
 ```

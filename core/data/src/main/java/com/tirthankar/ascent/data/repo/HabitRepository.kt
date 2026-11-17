@@ -29,7 +29,7 @@ data class HabitDetail(
  *
  * - A completion records x = 1 for its period at once, so the score moves when you
  *   tick the quest; an undo removes it again.
- * - The reset records every issued period's final value (done 1, otherwise 0).
+ * - The reset records each issued period's final actual/target fraction.
  * - Powers that change history afterwards (Unbroken) never touch it (D3).
  *
  * The cache holds the latest value per series; every write refreshes it, and a miss
@@ -58,8 +58,8 @@ class HabitRepository @Inject constructor(
     }
 
     /**
-     * Records [quest]'s period: x = 1 when [done], else 0 (quests have no partial
-     * progress yet). Call only for periods that count: not rest days or neutral days.
+     * Records [quest]'s actual/target fraction (or full completion).
+     * Call only for periods that count: not rest days or neutral days.
      */
     internal suspend fun record(quest: QuestEntity, done: Boolean, at: Long) {
         val seriesId = quest.seriesId ?: return
@@ -67,9 +67,9 @@ class HabitRepository @Inject constructor(
             HabitObservationEntity(
                 seriesId = seriesId,
                 periodKey = quest.day,
-                x = HabitStrength.x(if (done) quest.target else 0.0, quest.target),
+                x = HabitStrength.x(if (done) maxOf(quest.target, quest.actualProgress) else quest.actualProgress, quest.target),
                 target = quest.target,
-                progress = if (done) quest.target else 0.0,
+                progress = if (done) maxOf(quest.target, quest.actualProgress) else quest.actualProgress,
                 recordedAt = at,
             ),
         )

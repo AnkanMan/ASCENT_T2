@@ -165,6 +165,9 @@ data class QuestEntity(
     val seriesId: String? = null,
     /** The grind guard's m paid at completion (v4); [xpAwarded] is the XP actually paid. */
     @ColumnInfo(defaultValue = "1.0") val guardMultiplier: Double = 1.0,
+    @ColumnInfo(defaultValue = "0.0") val actualProgress: Double = 0.0,
+    @ColumnInfo(defaultValue = "'AUTO'") val measurementMode: String = "AUTO",
+    @ColumnInfo(defaultValue = "0") val legacyProgress: Boolean = false,
 )
 
 enum class GoalHorizon { WEEK, LONG }

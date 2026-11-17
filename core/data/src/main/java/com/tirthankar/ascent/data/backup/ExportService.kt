@@ -2,6 +2,7 @@ package com.tirthankar.ascent.data.backup
 
 import android.content.Context
 import android.net.Uri
+import androidx.room.withTransaction
 import com.tirthankar.ascent.data.GameDay
 import com.tirthankar.ascent.data.TimeSource
 import com.tirthankar.ascent.data.db.AscentDatabase
@@ -57,12 +58,18 @@ class ExportService @Inject constructor(
     }
 
     suspend fun write(out: OutputStream) {
-        val files = linkedMapOf(
+        val files = db.withTransaction { linkedMapOf(
             ExportColumns.QUESTS to quests(),
             ExportColumns.DAILY to daily(),
             ExportColumns.HABITS to habitRows(),
             ExportColumns.XP_LOG to xpLog(),
-        )
+            ExportColumns.PLANS to db.plannerDao().plans().map { listOf(it.id.toString(), LocalDate.ofEpochDay(it.targetDay).toString(), it.state, moment(it.writtenAt), it.completedAt?.let(::moment)) },
+            ExportColumns.PLAN_ITEMS to db.plannerDao().items().map { i ->
+                val q = i.questId?.let { db.questDao().getById(it) }
+                listOf(i.id.toString(), i.planId.toString(), i.position.toString(), i.title, i.questId?.toString(), q?.measurementMode ?: i.mode, number(q?.target ?: i.target), q?.unitLabel ?: i.unit, number(q?.actualProgress ?: i.progress), (q?.let { it.status == QuestStatus.DONE } ?: i.done).toString())
+            },
+            ExportColumns.SESSIONS to db.plannerDao().sessions().map { listOf(it.id, it.questId?.toString(), it.itemId?.toString(), it.state, moment(it.startedAt), moment(it.endsAt), it.activeSeconds.toString(), it.endedAt?.let(::moment), number(it.quantity), it.origin, it.note) },
+        ) }
         ZipOutputStream(out).use { zip ->
             files.forEach { (name, rows) ->
                 zip.putNextEntry(ZipEntry(name))
@@ -90,13 +97,13 @@ class ExportService @Inject constructor(
             q.tier.name,
             number(q.target),
             q.unitLabel,
-            number(if (done) q.target else 0.0),
+            number(if (done) maxOf(q.target, q.actualProgress) else q.actualProgress),
             q.status.name,
             q.source.name,
             moment(q.createdAtMillis),
             q.completedAtMillis?.let(::moment) ?: q.completedDay?.let { LocalDate.ofEpochDay(it).toString() },
             q.xpAwarded.toString(),
-            number(q.guardMultiplier),
+            number(q.guardMultiplier), q.measurementMode, q.legacyProgress.toString(),
         )
     }
 

@@ -19,13 +19,15 @@ quests.csv — one row per quest instance (a repeating quest has one row per day
   tier: TRIVIAL, EASY, NORMAL, HARD or EXTREME
   target: the target amount for that day or week
   unit: the unit as written (reps, min, pages, done, ...)
-  progress: the amount done; quests are done or not done, so this is the target or 0
+  progress: recorded actual progress; legacy completed rows infer their target
   status: OPEN, DONE, EXPIRED or REMOVED
   source: TEMPLATE (issued by the app), CLAUDE (applied from Claude) or MANUAL (added by you)
   issuedAt: when the quest was created
   completedAt: when it was completed; empty if not done
   paidXp: the XP it paid (0 if not done)
   guardMultiplier: the grind guard's multiplier when it was paid (1 for full XP)
+  measurementMode: AUTO, CHECKBOX, COUNT, DURATION or QUANTITY
+  legacyProgress: true when progress was inferred during migration
 
 daily.csv — one row per game day
   date: the game day
@@ -51,7 +53,7 @@ habits.csv — one row per habit series and period
 
 xp_log.csv — one row per XP change
   timestamp: when it happened
-  source: QUEST, BOSS_TASK, BOSS, TRIAL, GATE, RANK_TRIAL, CHAPTER, UNBROKEN or OTHER
+  source: QUEST, BOSS_TASK, BOSS, TRIAL, GATE, RANK_TRIAL, CHAPTER, UNBROKEN, OTHER, PLAN_WRITTEN or PLAN_COMPLETED
   amount: XP gained; negative for an undo
   multipliers: the multipliers that weren't 1, e.g. "guard=0.5 power=3.0 crit=2.0"
 
@@ -87,3 +89,42 @@ Extreme 3. A quest pays the multiplier of its last slot n:
 
 so the 4th pays 50%, the 5th 25%, the 6th 12.5%, the 7th onward 10%. It scales XP
 and mastery. Undo refunds exactly what was paid.
+
+
+plans.csv — Phase 6 records
+  id: plan ID
+  targetDay: target game day
+  state: SCHEDULED, ACTIVE, COMPLETED, EXPIRED or NEUTRAL
+  writtenAt: 10 XP claim time
+  completedAt: 40 XP claim time; empty if unpaid
+
+
+plan_items.csv — Phase 6 records
+  id: id
+  planId: planId
+  position: position
+  title: title
+  questId: questId
+  mode: mode
+  target: target
+  unit: unit
+  progress: progress
+  done: done
+
+
+sessions.csv — Phase 6 records
+  id: id
+  questId: questId
+  itemId: itemId
+  state: state
+  startedAt: startedAt
+  endsAt: endsAt
+  activeSeconds: activeSeconds
+  endedAt: endedAt
+  quantity: quantity
+  origin: origin
+  note: note
+
+Session state SAVED contributes to progress; VOID and EXPIRED do not. A questId and itemId are mutually exclusive. TIMER and MANUAL distinguish the result origin. Running duration is checkpointed; a restored session pauses and does not count restore downtime.
+
+Timed count/distance results remain self-reported: TIMER records that a timer was used, not automatic verification of the quantity.

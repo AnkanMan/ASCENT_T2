@@ -68,6 +68,7 @@ enum class NoticeKind {
     RANK_UP,
     RANK_TRIAL_FAILED,
     STREAK_SHIELDED,
+    PLAN_COMPLETED,
 }
 
 @Singleton

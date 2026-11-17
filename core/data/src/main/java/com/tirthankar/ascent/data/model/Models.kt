@@ -9,6 +9,8 @@ import com.tirthankar.ascent.data.db.QuestScope
 import com.tirthankar.ascent.data.db.QuestSource
 import com.tirthankar.ascent.data.db.QuestStatus
 import com.tirthankar.ascent.data.repo.guardOrigin
+import com.tirthankar.ascent.data.repo.mode
+import com.tirthankar.ascent.engine.MeasurementMode
 import com.tirthankar.ascent.engine.QuestOrigin
 import com.tirthankar.ascent.engine.Rank
 import com.tirthankar.ascent.engine.Realm
@@ -69,6 +71,8 @@ data class Quest(
     val guardMultiplier: Double = 1.0,
     /** Added by you (your own quests, bounties, Clarity's extras): the grind guard applies. */
     val selfAdded: Boolean = false,
+    val actualProgress: Double = 0.0,
+    val requiresResult: Boolean = false,
 ) {
     val isDone: Boolean get() = status == QuestStatus.DONE
 }
@@ -115,6 +119,8 @@ internal fun QuestEntity.toModel(canUndo: Boolean) = Quest(
     seriesId = seriesId,
     guardMultiplier = guardMultiplier,
     selfAdded = guardOrigin() == QuestOrigin.SELF_ADDED,
+    actualProgress = actualProgress,
+    requiresResult = kind == QuestKind.NORMAL && mode() != MeasurementMode.CHECKBOX,
 )
 
 internal fun GoalEntity.toModel(progress: Double) = Goal(

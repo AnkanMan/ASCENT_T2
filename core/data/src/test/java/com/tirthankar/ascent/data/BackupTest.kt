@@ -97,6 +97,10 @@ class BackupTest {
         val g = newGame("roundtrip.db")
         g.db.questDao().getDailyObjectives(wednesday).take(2).forEach { g.quests.complete(it.id) }
         g.quests.add(mine("Post the form"))
+        g.activities.saveTomorrow(g.gameDay.today().toEpochDay() + 1, listOf(com.tirthankar.ascent.data.repo.PlannedTask("Read tomorrow")))
+        val sessionQuest = g.quests.add(mine("Measured errand"))!!
+        val sessionId = g.activities.start(questId = sessionQuest, manual = true)!!
+        g.activities.saveResult(sessionId, 1.0)
         val zip = g.backupTo(folder.newFolder("out"))
         val before = dump(g.db)
         val settings = g.paths.datastore.readBytes()

@@ -165,6 +165,7 @@ class QuestLogViewModel @Inject constructor(
         when (event) {
             is QuestLogEvent.SelectTab -> local.update { it.copy(tab = event.tab) }
             is QuestLogEvent.Toggle -> toggle(event.questId)
+            is QuestLogEvent.OpenTask -> Unit
             QuestLogEvent.RewardShown -> local.update { it.copy(reward = null) }
 
             QuestLogEvent.OpenQuestForm -> viewModelScope.launch {
@@ -399,6 +400,8 @@ class QuestLogViewModel @Inject constructor(
         realm = realm,
         stat = stat,
         tier = tier,
+        actualProgress = actualProgress,
+        requiresResult = requiresResult,
         target = target,
         unitLabel = unitLabel,
         done = isDone,

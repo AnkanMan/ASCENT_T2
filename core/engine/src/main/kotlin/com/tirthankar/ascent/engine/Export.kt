@@ -61,7 +61,7 @@ object ExportColumns {
 
     val quests = listOf(
         "id", "seriesId", "scope", "realm", "title", "tier", "target", "unit", "progress", "status", "source",
-        "issuedAt", "completedAt", "paidXp", "guardMultiplier",
+        "issuedAt", "completedAt", "paidXp", "guardMultiplier", "measurementMode", "legacyProgress",
     )
     val daily = listOf(
         "date", "level", "totalXp", "hp", "mp", "streak",
@@ -70,7 +70,13 @@ object ExportColumns {
     val habits = listOf("seriesId", "title", "periodKey", "x", "strength")
     val xpLog = listOf("timestamp", "source", "amount", "multipliers")
 
-    val files: Map<String, List<String>> = linkedMapOf(QUESTS to quests, DAILY to daily, HABITS to habits, XP_LOG to xpLog)
+    const val PLANS = "plans.csv"
+    const val PLAN_ITEMS = "plan_items.csv"
+    const val SESSIONS = "sessions.csv"
+    val plans = listOf("id", "targetDay", "state", "writtenAt", "completedAt")
+    val planItems = listOf("id", "planId", "position", "title", "questId", "mode", "target", "unit", "progress", "done")
+    val sessions = listOf("id", "questId", "itemId", "state", "startedAt", "endsAt", "activeSeconds", "endedAt", "quantity", "origin", "note")
+    val files: Map<String, List<String>> = linkedMapOf(QUESTS to quests, DAILY to daily, HABITS to habits, XP_LOG to xpLog, PLANS to plans, PLAN_ITEMS to planItems, SESSIONS to sessions)
 }
 
 /** Reads the column list for one file out of the README: indented `name:` lines under its heading. */

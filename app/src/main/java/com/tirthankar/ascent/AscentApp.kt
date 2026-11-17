@@ -29,6 +29,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.toRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -58,6 +59,8 @@ import com.tirthankar.ascent.feature.gates.BossArenaRoute
 import com.tirthankar.ascent.feature.gates.GatesRoute
 import com.tirthankar.ascent.feature.inventory.InventoryRoute
 import com.tirthankar.ascent.feature.quests.QuestLogRoute
+import com.tirthankar.ascent.feature.quests.PlannerRoute
+import com.tirthankar.ascent.feature.quests.TaskActivityRoute
 import com.tirthankar.ascent.feature.skills.ClassAwakeningHost
 import com.tirthankar.ascent.feature.skills.FocusSessionHost
 import com.tirthankar.ascent.feature.skills.SkillsRoute
@@ -71,6 +74,10 @@ import kotlin.reflect.KClass
 
 /** Bottom-bar destinations (D8, D10; Phase 4 adds Skills): Status · Quests · Console · Gates · Skills. */
 @Serializable data object StatusDestination
+
+@Serializable data object PlannerDestination
+
+@Serializable data class TaskActivityDestination(val questId: Long? = null, val itemId: Long? = null)
 
 @Serializable data object QuestsDestination
 
@@ -167,6 +174,8 @@ private fun rememberBackupPickers(): BackupPickers {
 @Composable
 private fun MainShell(viewModel: MainViewModel, openConsole: Boolean, onConsoleOpened: () -> Unit) {
     val nav = rememberNavController()
+    val pageEntry by nav.currentBackStackEntryAsState()
+    val activityPage = pageEntry?.destination?.let { it.hasRoute<PlannerDestination>() || it.hasRoute<TaskActivityDestination>() } == true
     val levelUp by viewModel.levelUp.collectAsStateWithLifecycle()
     val loot by viewModel.loot.collectAsStateWithLifecycle()
     val notices by viewModel.notices.collectAsStateWithLifecycle()
@@ -186,7 +195,7 @@ private fun MainShell(viewModel: MainViewModel, openConsole: Boolean, onConsoleO
     Box(Modifier.fillMaxSize()) {
         Scaffold(
             containerColor = Color.Transparent,
-            bottomBar = { BottomBar(nav) },
+            bottomBar = { if (!activityPage) BottomBar(nav) },
         ) { padding ->
             NavHost(nav, startDestination = StatusDestination, modifier = Modifier.padding(padding)) {
                 composable<StatusDestination> {
@@ -197,7 +206,19 @@ private fun MainShell(viewModel: MainViewModel, openConsole: Boolean, onConsoleO
                         onOpenSkills = { nav.navigateToTab(Tab.SKILLS) },
                     )
                 }
-                composable<QuestsDestination> { QuestLogRoute() }
+                composable<QuestsDestination> {
+                    QuestLogRoute(
+                        onOpenPlanner = { nav.navigate(PlannerDestination) },
+                        onOpenTask = { nav.navigate(TaskActivityDestination(it.questId, it.itemId)) },
+                    )
+                }
+                composable<PlannerDestination> {
+                    PlannerRoute(onBack = { nav.popBackStack() }, onOpenTask = { nav.navigate(TaskActivityDestination(it.questId, it.itemId)) })
+                }
+                composable<TaskActivityDestination> { entry ->
+                    val task = entry.toRoute<TaskActivityDestination>()
+                    TaskActivityRoute(task.questId, task.itemId, onBack = { nav.popBackStack() })
+                }
                 composable<ConsoleDestination> { ConsoleRoute() }
                 composable<GatesDestination> { GatesRoute(onOpenBoss = { id -> nav.navigate(BossArenaDestination(id)) }) }
                 composable<SkillsDestination> { SkillsRoute() }

@@ -48,6 +48,11 @@ class RestoreFinisher @Inject constructor(
             val actual = runCatching { sql.query("SELECT COUNT(*) FROM `$table`").use { c -> c.moveToFirst(); c.getLong(0) } }.getOrNull()
             actual != null && actual >= expected
         }
+        db.withTransaction {
+            db.plannerDao().sessions().filter { it.state == "RUNNING" }.forEach {
+                db.plannerDao().update(it.copy(state = "PAUSED", anchor = null, note = "RESTORE_RECOVERY"))
+            }
+        }
         val today = gameDay.today().toEpochDay()
         val now = time.now().toEpochMilli()
         val createdAt = try {

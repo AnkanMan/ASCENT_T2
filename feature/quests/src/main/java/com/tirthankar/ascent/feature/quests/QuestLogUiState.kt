@@ -46,6 +46,8 @@ data class QuestCardUi(
     val paysPercent: Int? = null,
     /** Grind guard: a done quest that was paid less than full. */
     val paidPercent: Int? = null,
+    val actualProgress: Double = 0.0,
+    val requiresResult: Boolean = false,
 ) {
     /** A done quest can only be tapped again to undo it. */
     val toggleEnabled: Boolean get() = !done || canUndo
@@ -217,6 +219,7 @@ data class ArcForm(
 
 sealed interface QuestLogEvent {
     data class SelectTab(val tab: QuestTab) : QuestLogEvent
+    data class OpenTask(val questId: Long) : QuestLogEvent
     data class Toggle(val questId: Long) : QuestLogEvent
     data object RewardShown : QuestLogEvent
 

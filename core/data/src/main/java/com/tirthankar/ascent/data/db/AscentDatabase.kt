@@ -40,6 +40,7 @@ import androidx.room.RoomDatabase
         HabitObservationEntity::class,
         HabitSeriesCacheEntity::class,
         XpEventEntity::class,
+        DayPlanEntity::class, PlanItemEntity::class, TaskSessionEntity::class,
     ],
     version = AscentDatabase.VERSION,
     exportSchema = true,
@@ -57,11 +58,13 @@ abstract class AscentDatabase : RoomDatabase() {
     abstract fun skillDao(): SkillDao
     abstract fun habitDao(): HabitDao
 
+    abstract fun plannerDao(): PlannerDao
+
     companion object {
-        const val VERSION = 4
+        const val VERSION = 5
         const val NAME = "ascent.db"
 
         /** All migrations, in order. Each is additive: player data is never dropped or rewritten. */
-        val MIGRATIONS = arrayOf(Migrations.MIGRATION_1_2, Migrations.MIGRATION_2_3, Migrations.MIGRATION_3_4)
+        val MIGRATIONS = arrayOf(Migrations.MIGRATION_1_2, Migrations.MIGRATION_2_3, Migrations.MIGRATION_3_4, Migrations.MIGRATION_4_5)
     }
 }

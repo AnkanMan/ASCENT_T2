@@ -93,6 +93,8 @@ class TestGame(dir: File, scope: CoroutineScope, dbName: String? = null) {
     val restoreFinisher = RestoreFinisher(db, backupPrefs, paths, gameDay, time, lore, events)
     val backups = BackupService(context, db, backupPrefs, paths, gameDay, time, content)
     val quests = QuestRepository(db, gameDay, time, events, rewards, random, settings, inventory, gates, arcs, achievements, skills, powers, trials, content, habits)
+    val sessionClock = FakeSessionClock(context)
+    val activities = com.tirthankar.ascent.data.repo.ActivityRepository(db, gameDay, sessionClock, com.tirthankar.ascent.data.repo.PlannerCoordinator(db, gameDay), quests, events, skills)
     val effects = PowerEffects(db, powers, quests, skills, titles, settings, gameDay, events, time)
     val goals = GoalRepository(db, gameDay, time)
     val players = PlayerRepository(db, settings, titles, time, gameDay, random)
@@ -115,4 +117,11 @@ class TestGame(dir: File, scope: CoroutineScope, dbName: String? = null) {
     }
 
     fun close() = db.close()
+}
+
+class FakeSessionClock(context: Context) : com.tirthankar.ascent.data.repo.SessionClock(context) {
+    var millis = 1000L
+    var bootNumber = 1
+    override fun elapsed() = millis
+    override fun boot() = bootNumber
 }

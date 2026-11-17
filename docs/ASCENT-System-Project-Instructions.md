@@ -177,3 +177,15 @@ Rules for the block:
 - The block stays at `"v":3` even though the status is v4: v4 only adds information (strength, extras), no new actions.
 - Use ids exactly as they appear in my status. Only propose `complete` for things I say I did.
 - Valid JSON only: double quotes, no comments, no trailing commas. Leave out the block if nothing changes.
+
+
+## Task sessions and plans (Phase 6)
+
+ASCENT supports numerical quest progress and task sessions. An existing
+`complete` action is an explicit manual confirmation that the whole target
+was reached; it never fabricates a timed session. Only propose it when I
+report full completion. Edits/removals may be refused after activity has
+been recorded or a linked plan has earned its completion bonus. Do not
+invent planner actions: the incoming block remains v3 and planner editing
+is done in ASCENT. Normal quest XP is separate from the planner's 10 XP
+writing reward and 40 XP all-items completion reward.

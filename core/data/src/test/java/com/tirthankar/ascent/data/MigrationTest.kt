@@ -359,6 +359,19 @@ class MigrationTest {
         )
     }
 
+    @Test
+    fun `migration 4 to 5 preserves quest XP and initializes legacy progress`() {
+        helper.createDatabase(DB, 1).use { insertPhase2Data(it) }
+        helper.runMigrationsAndValidate(DB, 4, true, Migrations.MIGRATION_1_2, Migrations.MIGRATION_2_3, Migrations.MIGRATION_3_4).close()
+        helper.runMigrationsAndValidate(DB, 5, true, Migrations.MIGRATION_4_5).use { db ->
+            db.query("SELECT actualProgress, legacyProgress, xpAwarded FROM quest WHERE publicId = 'qdone'").use { c ->
+                assertTrue(c.moveToFirst()); assertEquals(40.0, c.getDouble(0)); assertEquals(1, c.getInt(1)); assertEquals(126L, c.getLong(2))
+            }
+            db.query("SELECT COUNT(*) FROM day_plan").use { c -> c.moveToFirst(); assertEquals(0, c.getInt(0)) }
+            db.query("SELECT COUNT(*) FROM task_session").use { c -> c.moveToFirst(); assertEquals(0, c.getInt(0)) }
+        }
+    }
+
     private companion object {
         const val DB = "migration-test"
     }

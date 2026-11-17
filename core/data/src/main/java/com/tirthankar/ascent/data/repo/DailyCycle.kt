@@ -102,6 +102,7 @@ class DailyCycle @Inject constructor(
         // A restore just swapped the files in: its gap days become neutral (D7).
         restore.finishIfPending()
         val neutralBefore = restore.neutralBefore() ?: Long.MIN_VALUE
+        db.withTransaction { PlannerCoordinator(db, gameDay).reconcile(neutralBefore) }
         val s = settings.current()
         val today = gameDay.clock(s).gameDay(gameDay.now())
         var resolved = 0
@@ -449,6 +450,7 @@ class DailyCycle @Inject constructor(
                 tags = quest.tags.split(',').filter { it.isNotBlank() }.toSet(),
                 // The copy continues the same habit series (PHASE5.md section 1).
                 seriesId = quest.seriesId,
+                measurementMode = quest.measurementMode,
             ),
             day,
         )

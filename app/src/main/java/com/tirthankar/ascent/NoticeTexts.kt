@@ -35,6 +35,7 @@ internal object NoticeTexts {
         NoticeKind.RANK_UP -> R.string.notice_rank_up
         NoticeKind.RANK_TRIAL_FAILED -> R.string.notice_rank_trial_failed
         NoticeKind.STREAK_SHIELDED -> R.string.notice_streak_shielded
+        NoticeKind.PLAN_COMPLETED -> R.string.notice_plan_completed
     }
 
     fun accent(kind: NoticeKind): Color = when (kind) {

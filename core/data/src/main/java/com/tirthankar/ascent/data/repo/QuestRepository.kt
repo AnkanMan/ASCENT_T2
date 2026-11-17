@@ -1,6 +1,9 @@
 package com.tirthankar.ascent.data.repo
 
 import androidx.room.withTransaction
+import com.tirthankar.ascent.engine.MeasurementMode
+import com.tirthankar.ascent.engine.PlannerRules
+import com.tirthankar.ascent.data.db.TaskSessionEntity
 import com.tirthankar.ascent.data.GameDay
 import com.tirthankar.ascent.data.GameEvent
 import com.tirthankar.ascent.data.GameEvents
@@ -82,6 +85,7 @@ data class NewQuest(
     val tags: Set<String> = emptySet(),
     /** The habit series to continue (the daily copy of a recurring quest). Null derives one ([seriesFor]). */
     val seriesId: String? = null,
+    val measurementMode: String = "AUTO",
 )
 
 /**
@@ -130,6 +134,7 @@ class QuestRepository @Inject constructor(
     private val content: ContentRepository,
     private val habits: HabitRepository,
 ) {
+    private val planner = PlannerCoordinator(db, gameDay)
     private val questDao = db.questDao()
     private val playerDao = db.playerDao()
 
@@ -156,27 +161,27 @@ class QuestRepository @Inject constructor(
 
     fun observeDay(day: LocalDate): Flow<List<Quest>> =
         combine(questDao.observeDay(day.toEpochDay()), playerDao.observePlayer()) { quests, player ->
-            quests.map { it.toModel(canUndo = it.canUndo(player, day.toEpochDay(), GameClock.weekStart(day).toEpochDay())) }
+            quests.map { it.toModel(canUndo = it.canUndo(player, day.toEpochDay(), GameClock.weekStart(day).toEpochDay()) && db.plannerDao().sealedLinks(it.id) == 0) }
         }
 
     fun observeWeek(day: LocalDate): Flow<List<Quest>> {
         val weekStart = GameClock.weekStart(day).toEpochDay()
         return combine(questDao.observeWeek(weekStart), playerDao.observePlayer()) { quests, player ->
-            quests.map { it.toModel(canUndo = it.canUndo(player, day.toEpochDay(), weekStart)) }
+            quests.map { it.toModel(canUndo = it.canUndo(player, day.toEpochDay(), weekStart) && db.plannerDao().sealedLinks(it.id) == 0) }
         }
     }
 
     /** Side quests open today, plus those finished today. */
     fun observeSide(day: LocalDate): Flow<List<Quest>> =
         combine(questDao.observeSide(day.toEpochDay()), playerDao.observePlayer()) { quests, player ->
-            quests.map { it.toModel(canUndo = it.canUndo(player, day.toEpochDay(), GameClock.weekStart(day).toEpochDay())) }
+            quests.map { it.toModel(canUndo = it.canUndo(player, day.toEpochDay(), GameClock.weekStart(day).toEpochDay()) && db.plannerDao().sealedLinks(it.id) == 0) }
         }
 
     suspend fun getByPublicId(publicId: String): Quest? {
         val today = gameDay.today()
         val player = playerDao.getPlayer()
         return questDao.getByPublicId(publicId)?.let {
-            it.toModel(it.canUndo(player, today.toEpochDay(), GameClock.weekStart(today).toEpochDay()))
+            it.toModel(it.canUndo(player, today.toEpochDay(), GameClock.weekStart(today).toEpochDay()) && db.plannerDao().sealedLinks(it.id) == 0)
         }
     }
 
@@ -186,7 +191,7 @@ class QuestRepository @Inject constructor(
         val player = playerDao.getPlayer()
         val weekStart = GameClock.weekStart(today).toEpochDay()
         val all = questDao.getDay(today.toEpochDay()) + questDao.getWeek(weekStart) + questDao.getOpenSide(today.toEpochDay())
-        return all.map { it.toModel(it.canUndo(player, today.toEpochDay(), weekStart)) }
+        return all.map { it.toModel(it.canUndo(player, today.toEpochDay(), weekStart) && db.plannerDao().sealedLinks(it.id) == 0) }
     }
 
     /** Adds a quest for today (daily) or this week (weekly). Returns null for forbidden quests. */
@@ -249,6 +254,7 @@ class QuestRepository @Inject constructor(
                 xpFactor = xpFactor,
                 tags = quest.tags.map { it.trim().lowercase() }.filter { it in KnownTags.ALL }.sorted().joinToString(","),
                 seriesId = quest.seriesId ?: seriesFor(quest, publicId),
+                measurementMode = quest.measurementMode,
             ),
         )
     }
@@ -258,6 +264,7 @@ class QuestRepository @Inject constructor(
         val quest = questDao.getById(questId) ?: return@withTransaction false
         if (quest.status != QuestStatus.OPEN) return@withTransaction false
         if (edit.title != null && SafetyRules.isForbidden(edit.title)) return@withTransaction false
+        if ((quest.actualProgress > 0 || db.plannerDao().sessions().any { it.questId == questId && it.state != "VOID" }) && (edit.target != null || edit.unitLabel != null || edit.title != null || edit.tier != null)) return@withTransaction false
         val unitLabel = edit.unitLabel ?: quest.unitLabel
         questDao.update(
             quest.copy(
@@ -284,6 +291,8 @@ class QuestRepository @Inject constructor(
         return db.withTransaction {
             val quest = questDao.getById(questId) ?: return@withTransaction false
             if (quest.status != QuestStatus.OPEN) return@withTransaction false
+            if (db.plannerDao().items().any { it.questId == questId }) return@withTransaction false
+            db.plannerDao().cancelQuestSessions(questId)
             questDao.update(quest.copy(status = QuestStatus.REMOVED))
             powers.refundForQuest(quest.id, today)
             true
@@ -298,7 +307,12 @@ class QuestRepository @Inject constructor(
      * Phase 4: skill and class passives (chains, Resonance, Literature Sense, Bonds,
      * Equilibrium) under the +75% cap, and powers on top of it (A10, A16).
      */
-    suspend fun complete(questId: Long): Boolean {
+    suspend fun complete(questId: Long): Boolean = finishQuest(questId)
+
+    internal suspend fun recordSession(questId: Long, sessionId: String, quantity: Double, adjusted: Boolean, note: String): Boolean =
+        finishQuest(questId, sessionId, quantity, adjusted, note)
+
+    private suspend fun finishQuest(questId: Long, sessionId: String? = null, quantity: Double = 0.0, adjusted: Boolean = false, note: String = ""): Boolean {
         val today = gameDay.today()
         val epoch = today.toEpochDay()
         val emitted = mutableListOf<GameEvent>()
@@ -306,8 +320,26 @@ class QuestRepository @Inject constructor(
         val s = settings.current()
         var partner: Long? = null
         val done = db.withTransaction {
-            val quest = questDao.getById(questId) ?: return@withTransaction false
-            if (quest.status != QuestStatus.OPEN || !quest.isCurrent(today)) return@withTransaction false
+            planner.reconcile()
+            var quest = questDao.getById(questId) ?: return@withTransaction false
+            if (quest.status != QuestStatus.OPEN || !quest.isCurrent(gameDay.today())) return@withTransaction false
+            if (sessionId != null) {
+                val session = db.plannerDao().session(sessionId) ?: return@withTransaction false
+                val mode = quest.mode()
+                if (session.questId != questId || session.state != "RESULT" || session.endsAt <= time.now().toEpochMilli() || !PlannerRules.validResult(quantity, mode)) return@withTransaction false
+                val amount = if (mode == MeasurementMode.CHECKBOX) quest.target else quantity
+                val total = quest.actualProgress + amount
+                if (!total.isFinite()) return@withTransaction false
+                db.plannerDao().update(session.copy(state = "SAVED", quantity = amount, endedAt = time.now().toEpochMilli(), origin = if (adjusted) "MANUAL" else session.origin, note = note.trim()))
+                quest = quest.copy(actualProgress = total, legacyProgress = false)
+                questDao.update(quest)
+                if (total < quest.target) return@withTransaction true
+            } else if (quest.kind == QuestKind.NORMAL && quest.actualProgress < quest.target) {
+                val missing = quest.target - quest.actualProgress
+                db.plannerDao().cancelQuestSessions(questId)
+                db.plannerDao().insert(TaskSessionEntity(java.util.UUID.randomUUID().toString(), questId = questId, state = "SAVED", startedAt = time.now().toEpochMilli(), endsAt = time.now().toEpochMilli(), endedAt = time.now().toEpochMilli(), quantity = missing, origin = "MANUAL"))
+                quest = quest.copy(actualProgress = quest.target, legacyProgress = false)
+            }
             val player = playerDao.getPlayer() ?: return@withTransaction false
             val attributes = playerDao.getAttributes()
             val stats = attributes.toStatBlock()
@@ -433,6 +465,7 @@ class QuestRepository @Inject constructor(
             emitted += GameEvent.QuestCompleted(quest.id, reward.xp, reward.isCritical, quest.stat, growth.statGain)
             if (levels.leveledUp) emitted += GameEvent.LevelUp(levels.fromLevel, levels.toLevel, levels.freePoints)
             partner = powers.parallelPartnerToComplete(quest, epoch)
+            planner.evaluate(emitted)
             true
         }
         emitted.forEach(events::emit)
@@ -454,6 +487,7 @@ class QuestRepository @Inject constructor(
         return db.withTransaction {
             val quest = questDao.getById(questId) ?: return@withTransaction false
             val player = playerDao.getPlayer() ?: return@withTransaction false
+            if (db.plannerDao().sealedLinks(questId) > 0) return@withTransaction false
             if (!quest.canUndo(player, today.toEpochDay(), GameClock.weekStart(today).toEpochDay())) {
                 return@withTransaction false
             }
@@ -479,6 +513,7 @@ class QuestRepository @Inject constructor(
             // Exactly what was paid comes back; nobody else is repaid (PHASE5.md section 2).
             db.logXp(-quest.xpAwarded, XpLog(XpSource.QUEST, epoch, time.now().toEpochMilli(), quest.id))
             habits.clear(quest)
+            db.plannerDao().sessions().filter { it.questId == questId && it.state == "SAVED" }.forEach { db.plannerDao().update(it.copy(state = "VOID")) }
             questDao.update(
                 quest.copy(
                     status = QuestStatus.OPEN,
@@ -490,10 +525,28 @@ class QuestRepository @Inject constructor(
                     levelAtCompletion = null,
                     hpAwarded = 0,
                     guardMultiplier = 1.0,
+                    actualProgress = 0.0,
                 ),
             )
             true
         }
+    }
+
+    internal suspend fun removeSession(questId: Long, sessionId: String): Boolean = db.withTransaction {
+        val session = db.plannerDao().session(sessionId) ?: return@withTransaction false
+        var q = questDao.getById(questId) ?: return@withTransaction false
+        if (session.questId != questId || session.state != "SAVED" || !q.isCurrent(gameDay.today()) || db.plannerDao().sealedLinks(questId) > 0) return@withTransaction false
+        val remaining = (q.actualProgress - session.quantity).coerceAtLeast(0.0)
+        if (q.status == QuestStatus.DONE && remaining < q.target) {
+            // Undo clears contributions; restore the unaffected saved records afterwards.
+            val kept = db.plannerDao().sessions().filter { it.questId == questId && it.state == "SAVED" && it.id != sessionId }
+            if (!undo(questId)) return@withTransaction false
+            kept.forEach { db.plannerDao().update(it) }
+            q = questDao.getById(questId)!!
+        }
+        db.plannerDao().update(session.copy(state = "VOID"))
+        questDao.update(q.copy(actualProgress = remaining))
+        true
     }
 
     /** Equilibrium's +10% XP on the day after a completed rest-day Daily. */
@@ -595,3 +648,6 @@ internal fun QuestEntity.canUndo(player: PlayerEntity?, today: Long, weekStart: 
             QuestScope.DAILY -> (completedDay ?: day) == today
             QuestScope.WEEKLY -> day == weekStart
         }
+
+internal fun QuestEntity.mode(): MeasurementMode =
+    if (measurementMode == "AUTO") PlannerRules.mode(unit) else MeasurementMode.valueOf(measurementMode)

@@ -6,6 +6,24 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 /** Schema migrations. Each one only adds: player data is never dropped or rewritten. */
 object Migrations {
 
+    /** v4 → v5: additive planner/session storage and explicit legacy progress. */
+    val MIGRATION_4_5 = object : Migration(4, 5) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE quest ADD COLUMN actualProgress REAL NOT NULL DEFAULT 0.0")
+            db.execSQL("ALTER TABLE quest ADD COLUMN measurementMode TEXT NOT NULL DEFAULT 'AUTO'")
+            db.execSQL("ALTER TABLE quest ADD COLUMN legacyProgress INTEGER NOT NULL DEFAULT 0")
+            db.execSQL("UPDATE quest SET actualProgress = CASE WHEN status = 'DONE' THEN target ELSE 0 END, legacyProgress = 1")
+            db.execSQL("CREATE TABLE IF NOT EXISTS day_plan (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, targetDay INTEGER NOT NULL, state TEXT NOT NULL, createdAt INTEGER NOT NULL, writtenAt INTEGER NOT NULL, completedAt INTEGER)")
+            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_day_plan_targetDay ON day_plan(targetDay)")
+            db.execSQL("CREATE TABLE IF NOT EXISTS plan_item (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, planId INTEGER NOT NULL, position INTEGER NOT NULL, title TEXT NOT NULL, questId INTEGER, mode TEXT NOT NULL, target REAL NOT NULL, unit TEXT NOT NULL, progress REAL NOT NULL, done INTEGER NOT NULL)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_plan_item_planId ON plan_item(planId)")
+            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_plan_item_planId_questId ON plan_item(planId, questId)")
+            db.execSQL("CREATE TABLE IF NOT EXISTS task_session (id TEXT NOT NULL PRIMARY KEY, questId INTEGER, itemId INTEGER, state TEXT NOT NULL, startedAt INTEGER NOT NULL, endsAt INTEGER NOT NULL, activeSeconds INTEGER NOT NULL, anchor INTEGER, boot INTEGER, endedAt INTEGER, quantity REAL NOT NULL, origin TEXT NOT NULL, note TEXT NOT NULL)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_task_session_questId ON task_session(questId)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_task_session_itemId ON task_session(itemId)")
+        }
+    }
+
     /** v1 → v2 (Phase 3): new tables for arcs, Gates, bosses, gear, achievements and lore. */
     val MIGRATION_1_2 = object : Migration(1, 2) {
         override fun migrate(db: SupportSQLiteDatabase) {

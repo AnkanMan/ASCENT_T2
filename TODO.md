@@ -1,4 +1,28 @@
-# TODO — Release: ASCENT for friends
+# TODO — Phase 6: Tomorrow planner and task sessions
+
+Implement `Phase6.md`. The player authorized the combined feature on 2026-11-17.
+The existing release checklist is preserved below; none of its device checks
+are completed merely by implementing this phase.
+
+- [x] Roadmap reconciled: planner/sessions Phase 6, integrations Phase 7.
+- [x] Planner and measurement rules; additive Room 4 → 5 migration and schema.
+- [x] Planner writing/completion rewards, quest binding, locks and daily expiry.
+- [x] Task detail, numerical progress, manual logging and persistent sessions.
+- [x] Shared Quest Log/planner UI, history and resume controls.
+- [x] Partial habit observations, Hyperfocus guards, Claude compatibility.
+- [x] Backup/restore integration and CSV export documentation.
+- [x] Required unit/migration tests, debug APK and lint green: 371 tests pass.
+- [x] UI revision: prominent glowing planner entry, full planner/task navigation
+      pages, holographic editor/progress/timer/history panels and saved drafts.
+- [x] UI revision verification: test/assembleDebug/lintDebug pass; same APK key.
+- [ ] UI phone checks: Back/unsaved draft confirmation, task return and rotation,
+      keyboard, large text and session controls on the new full pages.
+- [ ] Phone checks and week of real use from Phase6.md, including expiry,
+      process/background recovery, bonus accounting and backup/restore.
+
+---
+
+# Carried-forward release checklist
 
 **Phase goal (`RELEASE.md`, SPEC "Release (friends build)"):** turn the
 personal build into an app friends can install, set up for themselves and
@@ -7,7 +31,7 @@ update without losing data. No new game features.
 **Exit (RELEASE.md):** one friend has installed 1.0.0, set up their own System
 in Claude, played three days, and installed an update without losing data.
 
-**Out of scope:** Phase 6 (Health Connect, focus-timer verification, the
+**Out of scope:** Phase 7 (Health Connect, focus-timer verification, the
 home-screen widget, check-in notifications, weekly charts) comes after the
 release as a normal update. Smarter templates and boss decomposition stay
 shelved.

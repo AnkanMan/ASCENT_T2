@@ -58,11 +58,14 @@ import java.util.Locale
 @Composable
 fun QuestLogRoute(
     modifier: Modifier = Modifier,
+    onOpenPlanner: () -> Unit = {},
+    onOpenTask: (TaskSelection) -> Unit = {},
     viewModel: QuestLogViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val activities: ActivitiesViewModel = hiltViewModel()
     Materialize(modifier) {
-        QuestLogScreen(state, viewModel::onEvent)
+        QuestLogScreen(state, { event -> if (event is QuestLogEvent.OpenTask) onOpenTask(TaskSelection(questId = event.questId)) else viewModel.onEvent(event) }, activityHub = { ActivityHub(onOpenPlanner, onOpenTask, activities) })
     }
     state.questForm?.let { QuestFormDialog(it, state.goals, viewModel::onEvent) }
     state.goalForm?.let { GoalFormDialog(it, viewModel::onEvent) }
@@ -85,6 +88,7 @@ fun QuestLogScreen(
     state: QuestLogUiState,
     onEvent: (QuestLogEvent) -> Unit,
     modifier: Modifier = Modifier,
+    activityHub: @Composable () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -93,6 +97,7 @@ fun QuestLogScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        activityHub()
         DailyHeader(state, onRewardShown = { onEvent(QuestLogEvent.RewardShown) })
         PrimaryTabRow(selectedTabIndex = state.tab.ordinal, containerColor = Color.Transparent, contentColor = AscentColors.GlowCyan) {
             QuestTab.entries.forEach { tab ->
@@ -238,7 +243,7 @@ internal fun QuestCard(card: QuestCardUi, onEvent: (QuestLogEvent) -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             HexagonCheck(
                 checked = card.done,
-                onToggle = { onEvent(QuestLogEvent.Toggle(card.id)) },
+                onToggle = { onEvent(if (!card.done && card.requiresResult) QuestLogEvent.OpenTask(card.id) else QuestLogEvent.Toggle(card.id)) },
                 contentDescription = description,
                 enabled = card.toggleEnabled,
             )
@@ -253,7 +258,7 @@ internal fun QuestCard(card: QuestCardUi, onEvent: (QuestLogEvent) -> Unit) {
                         } else {
                             // Long-press casts a power on this quest (PHASE4.md section 2); TalkBack gets an action.
                             Modifier
-                                .pointerInput(card.id) { detectTapGestures(onLongPress = { onEvent(QuestLogEvent.OpenCast(card.id)) }) }
+                                .pointerInput(card.id) { detectTapGestures(onTap = { onEvent(QuestLogEvent.OpenTask(card.id)) }, onLongPress = { onEvent(QuestLogEvent.OpenCast(card.id)) }) }
                                 .semantics {
                                     customActions = listOf(CustomAccessibilityAction(castLabel) { onEvent(QuestLogEvent.OpenCast(card.id)); true })
                                 }
@@ -272,7 +277,7 @@ internal fun QuestCard(card: QuestCardUi, onEvent: (QuestLogEvent) -> Unit) {
                         color = AscentColors.SystemBlue,
                     )
                     Text(
-                        stringResource(R.string.quests_target, formatNumber(card.target), card.unitLabel),
+                        stringResource(R.string.activity_progress, formatNumber(card.actualProgress), formatNumber(card.target), card.unitLabel),
                         style = AscentTextStyles.Number,
                         color = AscentColors.Mist.copy(alpha = 0.85f),
                     )
@@ -287,6 +292,7 @@ internal fun QuestCard(card: QuestCardUi, onEvent: (QuestLogEvent) -> Unit) {
                 if (tags.isNotEmpty()) {
                     Text(tags.joinToString(" · "), style = MaterialTheme.typography.labelSmall, color = AscentColors.GlowCyan.copy(alpha = 0.8f))
                 }
+                if (card.kind == QuestKind.NORMAL) TextButton(onClick = { onEvent(QuestLogEvent.OpenTask(card.id)) }) { Text(stringResource(R.string.activity_open)) }
                 if (card.powers.isNotEmpty()) {
                     Text("◈ " + card.powers.joinToString(" · "), style = AscentTextStyles.SystemLabel, color = AscentColors.LegendGold)
                 }

@@ -165,7 +165,7 @@ A Daily Quest as it appears on screen:
 
 **Verification.** Three methods, chosen per objective:
 
-- **Health Connect** — steps, exercise sessions and sleep are read automatically. *Planned for Phase 6, after the Release; until then these are checked off by hand.*
+- **Health Connect** — steps, exercise sessions and sleep are read automatically. *Planned for Phase 7, after the Release; until then these are checked off by hand.*
 - **Focus timer** — the in-app session timer is its own proof for deep-work and reading blocks.
 - **Manual check-off** — everything else, on the honour system, with an optional note or photo. It is a single-player game: cheating only corrupts your own character sheet.
 
@@ -535,7 +535,7 @@ You wear one title at a time, shown under your name. Titles are cosmetic, except
 
 **Definitions.** Ergodic: at least one quest done in each realm that day. Equipartition: the highest stat ≤ 1.1 × the lowest.
 
-**Logged data.** Health Connect comes in Phase 6 (see the roadmap), so until then achievements count logged quests: Deep Field counts minutes on completed Mind quests with a time unit, Diffusive Limit counts the targets of completed step quests, and Still Night counts completed lights-out quests on consecutive nights. If Health Connect is built later, it switches them to real data. Counters are backfilled from your quest history when achievements first switch on.
+**Logged data.** Health Connect comes in Phase 7 (see the roadmap), so until then achievements count logged quests: Deep Field counts minutes on completed Mind quests with a time unit, Diffusive Limit counts the targets of completed step quests, and Still Night counts completed lights-out quests on consecutive nights. If Health Connect is built later, it switches them to real data. Counters are backfilled from your quest history when achievements first switch on.
 
 ### Claude bridge: new actions (block v2)
 
@@ -605,7 +605,7 @@ Buildable rules, export columns and the required tests are in `PHASE5.md`. Its d
 ### Habit strength
 
 - **Series.** A repeating quest across every period it is issued. Template quests form one series per template key. Your own and Claude's recurring quests get a `seriesId` when created, carried forward by the daily copy. One-off quests have no series.
-- **Observation.** For each period in which the series was issued, x = min(progress / target, 1), measured against that period's own target. Quests have no progress column yet, so x is 1 for a completed quest and 0 otherwise; partial credit waits for progress logging.
+- **Observation.** For each period in which the series was issued, x = min(progress / target, 1), measured against that period's own target. Phase 6 stores actual progress for measured quests. At period close, x uses actual progress / target (capped at 1); checkbox quests retain binary observations. Legacy rows are labelled as inferred and have no fabricated sessions.
 - **Score.** Sₖ = (1 − α) · Sₖ₋₁ + α · xₖ, with S₀ = 0. Daily α = 1 − 0.2^(1/30) ≈ 0.05223 (D1): a perfect record reaches 80% / 96% / 99.2% after 30 / 60 / 90 days. Weekly α = 1 − 0.2^(7/30) ≈ 0.3131 (D2): 31% / 78% / 95% after 1 / 4 / 8 weeks. The period key is the game day (reset to reset), or the week's Sunday for weekly quests.
 - **Periods that don't count.** No update at all for a period in which the series wasn't issued: rest days, the day Second Wind swapped the quest out (that day belongs to the Mobility series instead), and neutral restore days (D7). A period in which it was issued and not done records 0, whatever Streak Shield or Unbroken did (D3). No power touches strength.
 - **Computation.** A completion records its period at once (so the score moves when you tick the quest), an undo removes it again, and the reset records every issued period's final value. Unbroken's later rewrite of yesterday never reaches it. S is recomputed from the full history, oldest first, in `Double`, with the latest value cached per series. It is shown as an integer percent, rounded half-up.
@@ -659,6 +659,42 @@ Buildable rules are in `RELEASE.md`. Its decisions R1–R6 (approved 2026-11-16)
 - **Friends' System.** Each friend makes their own Claude Project from a bundled, generic instructions template filled from their onboarding (Settings → The System). The app stays fully playable without Claude.
 - **About.** Credits for the bundled fonts (Rajdhani, Inter and JetBrains Mono, SIL Open Font License), the Kenney sounds (CC0) and the open-source libraries.
 
+## Tomorrow planner and task sessions (Phase 6)
+
+Buildable rules and the implementation checklist are in `Phase6.md`.
+
+The Quest Log opens the planner through a prominent glowing blue holographic
+button with a calendar/checklist emblem. Planner (Today/Tomorrow/History) and
+task details are full navigation pages with Back controls, using the existing
+System panels, type and palette. Tomorrow separates its briefing, numbered
+objectives and task editor; task details separate progress, timer, result entry
+and history. Preserve planner drafts/tab on task return and rotation; confirm
+before discarding unsaved changes. The app bottom bar is hidden on these pages.
+
+- One nonempty plan for the next game day earns exactly 10 XP on first save.
+  Editing/resaving never earns more. At the target day's start the list locks;
+  completing every item before the next reset grants exactly 40 extra XP once.
+  No partial bonus or planner penalty. Both grants bypass quest multipliers.
+- Normal daily quests may be linked to initially untouched planner items on
+  their target day. They keep all normal rewards and rules. Standalone items
+  have no individual quest XP. A paid plan seals linked quest undo.
+- Task details support Start, Pause/Resume, Finish and manual result logging.
+  Count/duration/quantity results accumulate across sessions; normal quest XP
+  and mastery are awarded once when the target is reached. Starting a session
+  or saving partial progress pays nothing. Actual above-target results are
+  retained without extra XP. One generic session can run at a time.
+- Sessions persist through navigation/process restart, exclude pause time,
+  and use monotonic timing. Boot/restore recovery pauses safely; generic
+  sessions and Hyperfocus cannot run together. Ordinary sessions never grant
+  Hyperfocus bonuses or change Do Not Disturb.
+- Daily tasks and plans expire at the existing daily reset; weekly quests
+  retain weekly expiry. No automatic recurring-copy progress or late reward.
+- Room schema 5 adds plans/items/sessions and quest progress/mode fields with
+  additive migration 4 → 5. Backups preserve them; exports include the three
+  new CSVs and explicit PLAN_WRITTEN/PLAN_COMPLETED XP sources.
+- Existing Claude `complete` is a manual full-completion confirmation, not
+  proof of elapsed time; imports cannot replay rewards or override locks.
+
 ## AI layer
 
 Claude is the System's voice and planner: it chooses quests, decomposes bosses, and explains your progress. Numbers are computed on the device first; the AI interprets them and never invents them.
@@ -701,7 +737,7 @@ The Status Window is home; a five-tab bottom bar (Status · Quests · Console ·
 | System Assessment | Weekly report: stat growth, completion heatmap (realm × weekday), findings, recommendations | Accept a suggested Gate |
 | Settings | Reset time, rest days, backup and export, sound, haptics, motion | Back up now, restore, export data |
 
-**Outside the app.** A home-screen widget (Jetpack Glance) showing Daily Quest progress and the countdown is planned for Phase 6. Notifications fire at the reset, three hours before the Daily expires, and for Emergency Quests, each with the System chime and silent during quiet hours.
+**Outside the app.** A home-screen widget (Jetpack Glance) showing Daily Quest progress and the countdown is planned for Phase 7. Notifications fire at the reset, three hours before the Daily expires, and for Emergency Quests, each with the System chime and silent during quiet hours.
 
 ## Tech architecture and data model
 
@@ -717,10 +753,10 @@ The game engine is plain Kotlin with no Android dependencies, so the XP maths, t
 | Structure | MVVM, single activity, Hilt for dependency injection | Standard and well supported by Claude Code |
 | Storage | Room (SQLite), DataStore for settings | Offline-first, one source of truth |
 | Background | WorkManager | Daily reset, Gate expiry, daily backup |
-| Health | Health Connect client (Phase 6) | Steps, exercise sessions, sleep |
+| Health | Health Connect client (Phase 7) | Steps, exercise sessions, sleep |
 | AI | Claude app via the share sheet and clipboard | Runs on your Claude plan; no API key or server |
 | Motion and sound | Compose animation, Canvas particles, Lottie, SoundPool, haptics | The System feel |
-| Charts and widget | Vico or custom Canvas; Jetpack Glance (Phase 6) | Weekly charts; home-screen quest widget |
+| Charts and widget | Vico or custom Canvas; Jetpack Glance (Phase 7) | Weekly charts; home-screen quest widget |
 
 **Modules.** `:core:engine` (pure Kotlin), `:core:data` (Room, repositories), `:core:designsystem` (theme, holo panels, sounds), `:integrations` (health, AI), and one `:feature:*` module per screen group.
 
@@ -757,7 +793,9 @@ Build in phases, each ending with something you actually use on your phone; neve
 
 **Release — ASCENT for friends.** Turn the personal build into an app friends can install, set up for themselves and update without losing data; no new game features. Buildable rules are in `RELEASE.md`; its decisions R1–R6 are folded into this document (Release).
 
-6. **Integrations (after the Release, as a normal update).** Health Connect, focus-timer verification, the home-screen widget, check-in notifications that open Ask the System, and weekly charts. (The Focus Session itself shipped in Phase 4.)
+6. **Tomorrow planner and task sessions.** `Phase6.md` defines a tomorrow plan (+10 XP once on first valid save; +40 extra XP once after every committed item is complete) and shared task details with Start/Pause/Resume/Finish, manual logging and numerical progress. These bonuses are independent of normal quest XP. Same daily reset, no late rewards, additive Room v5 storage, session history and backup/export support. Real-phone exit checks remain required.
+
+7. **Integrations (after the Release, as a normal update).** Health Connect, focus-timer verification, the home-screen widget, check-in notifications that open Ask the System, and weekly charts. (The Focus Session itself shipped in Phase 4.)
 
 **Still shelved.** Smarter template quests and boss decomposition from the old AI phase; nothing is built until you un-shelve them. (The Insight power shipped in Phase 4 as a share request.)
 

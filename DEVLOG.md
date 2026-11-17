@@ -1886,3 +1886,163 @@ to go on. This is section B.
   confirm progress persists. The existing phase exit checks remain open.
 - If a differently signed ASCENT is already installed, back up its player
   data before considering uninstalling it; this debug key may not match.
+
+## 2026-11-17 — Tomorrow planner implementation proposal
+
+**What changed**
+- Added `Phase6.md` at the player's request: a tomorrow planner with 10 XP
+  for saving a nonempty plan and 40 additional XP only after every planned
+  item is complete. Normal quests can be linked and retain their normal XP.
+- Specified reuse of the existing game-day reset, XP grants/log, Quest Log,
+  database and backups; proposed transactional claims, schema 4 → 5,
+  lifecycle handling, UI, export, tests and an ordered implementation plan.
+- Separated confirmed requirements from proposed defaults, including plan
+  locking, quest binding and undo behaviour after payout.
+
+**Decisions and open issues**
+- SPEC already reserves Phase 6 for integrations. The proposal explicitly
+  flags this conflict and puts the coordinated roadmap change (planner as
+  Phase 6, integrations as Phase 7) in Task 0. SPEC, CLAUDE and the active
+  release TODO have not been rewritten by this documentation request.
+- Documentation only: no planner runtime code or database changes, no new
+  APK, and no phone checks claimed. Build/tests were not rerun for prose.
+- Suggested commit: `Document Phase 6 tomorrow planner implementation plan`.
+
+## 2026-11-17 — Add task sessions to the Phase 6 proposal
+
+**What changed**
+- Expanded `Phase6.md` to cover task details, Start/Pause/Resume/Finish,
+  contextual numerical result forms, manual logging, accumulated progress
+  and session history shared by the Quest Log and planner.
+- Added proposed persistence, clock/expiry/restore behaviour, measurement
+  types, partial habit strength, normal reward/undo integration and
+  compatibility with Hyperfocus and existing Claude actions.
+- Integrated storage/migration, export, tests, phone checks and build order
+  with the existing planner design. Planner bonuses remain 10 XP on writing
+  and 40 extra XP only after every item is complete.
+
+**Scope and validation**
+- Documentation only; no runtime, database, SPEC roadmap or release TODO
+  changes. Defaults such as one running session remain proposals.
+- Checked section references and the combined implementation checklist.
+  Build/tests were not rerun for prose; no new APK was generated.
+- Suggested commit: `Expand Phase 6 plan with shared task sessions`.
+
+
+## 2026-11-17 — Phase 6 implementation: planner and task sessions
+
+**Player authorization and scope**
+- Implemented the combined `Phase6.md` design at the player's request.
+  SPEC now assigns planner/sessions to Phase 6 and integrations to Phase 7;
+  CLAUDE and TODO references are coordinated. Previous release and phone
+  checks remain carried forward, not marked complete.
+
+**What changed**
+- Tomorrow planner in the Quest Log: Today/Tomorrow/History, nonempty lists,
+  add/edit/remove/reorder, explicit first-save 10 XP, editing without repeat
+  rewards, target-day locking and daily expiry. Normal daily quests can be
+  linked to untouched active-plan items. Only completing every item awards
+  the additional 40 XP, with one global System notice and an XP-log claim.
+- Task details and persistent Start/Pause/Resume/Finish sessions shared by
+  normal quests and standalone planner items; manual activity entry, count,
+  quantity and duration results, notes, partial progress and history.
+  Results accumulate across sessions; normal quest rewards pay only once
+  at target. Simple checkbox quests keep quick completion.
+- A single generic running session, monotonic timing, foreground checkpoints,
+  process recovery and safe pause on reboot/restore. UI polling stops when
+  the Quest Log is not visible. Starting another activity explicitly offers
+  to pause the current one. Generic timers and Hyperfocus cannot overlap;
+  Hyperfocus otherwise retains its existing power/session behaviour.
+- Partial measured habit observations at period close. Existing goal/Gate/
+  arc consumers still count ordinary completed quests, avoiding duplicate
+  progress from partial session saves. Claude `complete` records an explicit
+  manual full completion; imports cannot replay rewards or change recorded
+  work through target edits. Rewarded plans seal linked quest undo, and
+  corrections retain existing level/loot restrictions.
+- Room v5, exported schema 5 and additive migration 4→5; legacy progress is
+  inferred explicitly without inventing sessions. Backup/restore includes
+  all new records. Consistent CSV snapshots now include plans.csv,
+  plan_items.csv and sessions.csv, plus quest mode/progress/provenance and
+  the new planner XP sources. Export README and Project instructions updated.
+- Added engine/repository/migration/concurrency tests and Compose Previews
+  for planner, detail, session, result, completion and expiration states.
+- APK version 1.1.0 / build 2, same application id, minimum and target SDK,
+  dependencies and signing certificate as the preceding debug APK.
+
+**Validation**
+- `test assembleDebug lintDebug` green: **371 tests**, zero failures/errors/
+  skips and no lint errors. Includes existing suite regressions, populated
+  backup round trip, migration chain and new planner/session edge cases.
+- APK signature verifies and its certificate matches the previous APK.
+  Merged APK has no INTERNET permission; minimum Android 9 / API 28.
+- APK: `build/ASCENT-phase6-debug.apk`; convenience copy updated at
+  `build/ASCENT-debug.apk`. Size: 43,691,353 bytes.
+- SHA-256: `d89649d50d527290ad3559003c66e87f1135645515c9e5cccd5653db37ca8237`.
+
+**Open checks and practical limits**
+- No physical phone or emulator interaction was performed. Test Tomorrow
+  saving/resaving, debug advance to the next day, normal-quest binding,
+  Start/Pause/Resume/Finish, 25+15 reps toward a 40-rep target, standalone
+  items, both bonuses, seal/undo messaging, expiration and backup/restore.
+- The one-week phase exit and earlier phone/release checks remain open.
+- Generic sessions intentionally have no background notification/service.
+  They recover via saved anchors in the same boot; reboot/restore keeps
+  safely checkpointed time rather than assuming unknown activity.
+- Health Connect, automatic verification, widgets and new Claude planner
+  actions are not part of this phase. Existing Hyperfocus remains separate.
+- Suggested commit: `Implement Phase 6 planner and persistent task sessions`.
+
+
+## 2026-11-17 — Phase 6 System UI and full-page navigation
+
+**Authorization and design**
+- The player requested a larger glowing planner button, a dedicated Tomorrow
+  planner page, and a dedicated task interface matching the app's System style.
+  Updated Phase6.md before implementing the authorized revision; SPEC and TODO
+  now describe the same navigation and visual requirements.
+- Reviewed existing Quest Log, Focus Session and design-system components:
+  reused the dark void/hex-grid backdrop, HoloPanel glow/corner brackets,
+  SystemBlue/GlowCyan tokens, Rajdhani headings and monospace session time.
+
+**Implementation**
+- Replaced the small planner outline control with a prominent full-width
+  holographic button, locally drawn calendar/checklist emblem, large blue
+  heading with static glow, subtitle and forward affordance.
+- Added typed app navigation destinations for planner and task details.
+  Today/Tomorrow/History are full-page tabs rather than a planner dialog.
+  Task links, ordinary Open task actions and the resume banner push the task
+  page; toolbar and Android Back return through the actual navigation stack.
+  Bottom navigation hides on these pages to keep the workspace clear.
+- Tomorrow has a dated reward briefing, numbered objective cards, separate
+  task editor, full-width fields and Add/Update/Save controls. Validation
+  explains invalid count/duration targets. Draft and tab use saveable state;
+  leaving unsaved work asks for discard confirmation. Save waits for pending
+  editor text to be added and derives dirty state from persisted items, so
+  failed saves do not silently mark a draft saved.
+- Task pages use objective/progress panels, a large monospace timer,
+  full-width Start/Pause/Resume/Finish controls, a result-entry panel and
+  session-history cards. Pending result sessions do not offer Resume.
+- Added full-page previews for Today, Tomorrow editor, history, task result,
+  completion and expiry, plus the planner entry preview. New strings are
+  resources; geometric emblem is decorative beside its labelled button.
+- No dependency, schema, permission, reward or expiry changes.
+
+**Validation and artifact**
+- `test assembleDebug lintDebug`: BUILD SUCCESSFUL; 371 tests, zero failures,
+  errors or skips; no lint errors. Used the existing temporary SDK/Gradle
+  caches; Gradle required execution outside the sandbox for local networking.
+- APK signature verified and certificate matches the previous phone APK.
+- Updated `build/ASCENT-phase6-ui-debug.apk`, `build/ASCENT-phase6-debug.apk`
+  and `build/ASCENT-debug.apk` (43,860,665 bytes; version 1.1.0/build 2).
+- SHA-256: `9bc94d33d7d1b64cd5e65da7cfc732083e0b5efd331aa2a45f2c28a377d405dd`.
+
+**Still to check on a phone**
+- Quest Log → prominent planner button → Tomorrow: add/edit/reorder/save;
+  toolbar and Android Back with an unsaved draft; rotation and keyboard.
+- Today → item → task → Back retains the planner tab/draft. Ordinary Open
+  task and resume banner open the same styled task page. Check large text,
+  Start/Pause/Resume/Finish, numerical result saving and session history.
+- No emulator/physical-device visual or interaction test was performed.
+  Existing Phase 6 week-of-use and earlier release checks remain pending.
+- No GitHub commit was attempted for this UI revision.
+- Suggested commit: `Polish Phase 6 System UI and add full-page planner and tasks`.

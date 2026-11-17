@@ -48,7 +48,7 @@ class ExportTest {
     }
 
     @Test
-    fun `the export holds four CSV files and a README, quoted and in README order`() = runTest {
+    fun `the export holds all documented CSV files and a README, quoted and in README order`() = runTest {
         val g = TestGame(folder.newFolder(), backgroundScope).also { game = it; it.awaken() }
         val wednesday = LocalDate.of(2026, 11, 11).toEpochDay()
         // A quest completed "before the XP log": history rebuilt from quest rows.
@@ -69,7 +69,7 @@ class ExportTest {
         val out = ByteArrayOutputStream()
         ExportService(g.context, g.db, g.habits, g.gameDay, g.time).write(out)
         val files = unzip(out.toByteArray())
-        assertEquals(setOf("quests.csv", "daily.csv", "habits.csv", "xp_log.csv", "README.txt"), files.keys)
+        assertEquals(ExportColumns.files.keys + ExportColumns.README, files.keys)
 
         val readme = files.getValue(ExportColumns.README)
         ExportColumns.files.forEach { (name, columns) ->
