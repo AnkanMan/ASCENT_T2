@@ -1,4 +1,4 @@
-# TODO — Phase 6: Tomorrow planner and task sessions
+# TODO — Phase 6: Planner, task sessions and Study Mode
 
 Implement `Phase6.md`. The player authorized the combined feature on 2026-11-17.
 The existing release checklist is preserved below; none of its device checks
@@ -15,6 +15,22 @@ are completed merely by implementing this phase.
 - [x] UI revision: prominent glowing planner entry, full planner/task navigation
       pages, holographic editor/progress/timer/history panels and saved drafts.
 - [x] UI revision verification: test/assembleDebug/lintDebug pass; same APK key.
+- [x] Daily focus exception: no Pause/Resume, full-target single result,
+      protected timer switching; engine/repository regression tests pass.
+- [x] Fix automatic side quests regenerating after completion on the same day;
+      regression covers repeated refreshes, Done state and next-day issuance.
+- [x] Study Mode rules, additive Room v6 storage, daily quota, measured XP,
+      persistent quotes, debrief/history and linked quest/planner integration.
+- [x] Study Mode special entry, full System page, orbital timer, timer guards,
+      backup/export integration and migration/repository/rule tests.
+- [x] Study Mode regression suite: 392 tests pass; build/lint green, signed 1.2.0 debug APK built.
+- [ ] Study Mode phone checks: minimum/linked duration, no Pause/Resume,
+      random persistent quote, early Finish/Discard, 3-attempt cap/reset,
+      exact 60-minute XP boundary, debrief/history, large text and recovery.
+- [ ] Side-quest phone check: complete automatic quest, reopen/refresh the app,
+      confirm no replacement appears until the next game day.
+- [ ] Focus phone checks: both daily focus templates, Finish/Discard,
+      full-session result, timer conflict messaging and recovery controls.
 - [ ] UI phone checks: Back/unsaved draft confirmation, task return and rotation,
       keyboard, large text and session controls on the new full pages.
 - [ ] Phone checks and week of real use from Phase6.md, including expiry,

@@ -68,6 +68,7 @@ class ExportService @Inject constructor(
                 val q = i.questId?.let { db.questDao().getById(it) }
                 listOf(i.id.toString(), i.planId.toString(), i.position.toString(), i.title, i.questId?.toString(), q?.measurementMode ?: i.mode, number(q?.target ?: i.target), q?.unitLabel ?: i.unit, number(q?.actualProgress ?: i.progress), (q?.let { it.status == QuestStatus.DONE } ?: i.done).toString())
             },
+            ExportColumns.STUDY to db.studyDao().all().map { listOf(it.id.toString(), LocalDate.ofEpochDay(it.day).toString(), it.subject, it.objective, it.questId?.toString(), it.state, it.plannedSeconds.toString(), it.activeSeconds.toString(), moment(it.startedAt), it.endedAt?.let(::moment), it.quoteIndex.toString(), it.learned, it.nextStep, it.xpAwarded.toString(), it.questXpAwarded.toString()) },
             ExportColumns.SESSIONS to db.plannerDao().sessions().map { listOf(it.id, it.questId?.toString(), it.itemId?.toString(), it.state, moment(it.startedAt), moment(it.endsAt), it.activeSeconds.toString(), it.endedAt?.let(::moment), number(it.quantity), it.origin, it.note) },
         ) }
         ZipOutputStream(out).use { zip ->

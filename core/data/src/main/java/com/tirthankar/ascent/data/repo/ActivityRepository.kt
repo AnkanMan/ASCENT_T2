@@ -27,6 +27,8 @@ data class ActivitySnapshot(
     val sessions: List<TaskSessionEntity>,
     val now: Long,
     val nextReset: Long,
+    val studyActive: Boolean = false,
+    val studyQuestId: Long? = null,
 )
 
 @Singleton
@@ -43,6 +45,7 @@ class ActivityRepository @Inject constructor(
 
     suspend fun snapshot(): ActivitySnapshot = db.withTransaction {
         coordinator.reconcile()
+        reconcileStudy(db, day, clock)
         // A boot change invalidates the monotonic anchor; keep only safely saved time.
         dao.sessions().filter { it.state == "RUNNING" && (it.boot != clock.boot() || (it.anchor ?: 0) > clock.elapsed()) }.forEach {
             dao.update(it.copy(state = "PAUSED", anchor = null, note = "CLOCK_RECOVERY"))
@@ -51,7 +54,7 @@ class ActivityRepository @Inject constructor(
             val delta = seconds(it) - it.activeSeconds
             dao.update(it.copy(activeSeconds = it.activeSeconds + delta, anchor = (it.anchor ?: clock.elapsed()) + delta * 1000))
         }
-        ActivitySnapshot(day.today().toEpochDay(), dao.plans(), dao.items(), db.questDao().all(), dao.sessions(), day.now().toEpochMilli(), day.nextReset().toEpochMilli())
+        ActivitySnapshot(day.today().toEpochDay(), dao.plans(), dao.items(), db.questDao().all(), dao.sessions(), day.now().toEpochMilli(), day.nextReset().toEpochMilli(), db.studyDao().active() != null, db.studyDao().active()?.questId)
     }
 
     suspend fun saveTomorrow(targetDay: Long, items: List<PlannedTask>): Boolean {
@@ -84,6 +87,7 @@ class ActivityRepository @Inject constructor(
 
     suspend fun setMode(questId: Long, mode: String): Boolean = db.withTransaction {
         val q = db.questDao().getById(questId) ?: return@withTransaction false
+        if (PlannerRules.singleSessionFocus(q.templateKey, q.scope == QuestScope.DAILY) && mode != "DURATION") return@withTransaction false
         if (mode !in MeasurementMode.entries.map { it.name } || q.status != QuestStatus.OPEN || q.actualProgress != 0.0 || dao.sessions().any { it.questId == questId }) return@withTransaction false
         if (mode == "DURATION" && q.unit !in listOf(TargetUnit.SECONDS, TargetUnit.MINUTES, TargetUnit.HOURS)) return@withTransaction false
         db.questDao().update(q.copy(measurementMode = mode))
@@ -108,10 +112,13 @@ class ActivityRepository @Inject constructor(
 
     suspend fun start(questId: Long? = null, itemId: Long? = null, manual: Boolean = false): String? = db.withTransaction {
         coordinator.reconcile()
+        reconcileStudy(db, day, clock)
+        if (db.studyDao().active() != null) return@withTransaction null
         val end = deadline(questId, itemId) ?: return@withTransaction null
         if (db.skillDao().activeCasts().any { cast -> cast.note == null && skills.definition(cast.skillId)?.handler == PowerHandlers.HYPERFOCUS }) return@withTransaction null
         val existing = dao.sessions().firstOrNull { it.questId == questId && it.itemId == itemId && it.state in listOf("RUNNING", "PAUSED", "RESULT") }
         if (existing != null) return@withTransaction existing.id
+        if (!manual && hasRunningFocus()) return@withTransaction null
         if (!manual) dao.sessions().filter { it.state == "RUNNING" }.forEach { dao.update(paused(it)) }
         val id = UUID.randomUUID().toString()
         dao.insert(TaskSessionEntity(id, questId, itemId, if (manual) "RESULT" else "RUNNING", day.now().toEpochMilli(), end,
@@ -119,13 +126,25 @@ class ActivityRepository @Inject constructor(
         id
     }
 
+    private suspend fun hasRunningFocus(exceptId: String? = null): Boolean = dao.sessions().any { session ->
+        session.state == "RUNNING" && session.id != exceptId && session.questId?.let { id ->
+            db.questDao().getById(id)?.let { PlannerRules.singleSessionFocus(it.templateKey, it.scope == QuestScope.DAILY) }
+        } == true
+    }
+
     fun seconds(session: TaskSessionEntity): Long = PlannerRules.elapsed(session.activeSeconds, session.anchor.takeIf { session.state == "RUNNING" }, session.boot, clock.elapsed(), clock.boot())
     private fun paused(s: TaskSessionEntity) = s.copy(state = "PAUSED", activeSeconds = seconds(s), anchor = null)
 
     suspend fun control(id: String, action: String): Boolean = db.withTransaction {
         coordinator.reconcile()
+        reconcileStudy(db, day, clock)
+        val study = db.studyDao().active()
+        if (study?.taskSessionId == id || (action == "RESUME" && study != null)) return@withTransaction false
         val s = dao.session(id) ?: return@withTransaction false
         if (s.state !in listOf("RUNNING", "PAUSED", "RESULT") || deadline(s.questId, s.itemId) == null) return@withTransaction false
+        val quest = s.questId?.let { db.questDao().getById(it) }
+        if (action in listOf("PAUSE", "RESUME") && quest?.let { PlannerRules.singleSessionFocus(it.templateKey, it.scope == QuestScope.DAILY) } == true) return@withTransaction false
+        if (action == "RESUME" && hasRunningFocus(exceptId = id)) return@withTransaction false
         if (action == "RESUME" && db.skillDao().activeCasts().any { it.note == null && skills.definition(it.skillId)?.handler == PowerHandlers.HYPERFOCUS }) return@withTransaction false
         val next = when (action) {
             "PAUSE" -> paused(s)
@@ -142,6 +161,7 @@ class ActivityRepository @Inject constructor(
     }
 
     suspend fun saveResult(id: String, value: Double, adjusted: Boolean = false, note: String = ""): Boolean {
+        if (db.studyDao().active()?.taskSessionId == id) return false
         val s = dao.session(id) ?: return false
         if (s.questId != null) return quests.recordSession(s.questId, id, value, adjusted, note)
         val emitted = mutableListOf<GameEvent>()

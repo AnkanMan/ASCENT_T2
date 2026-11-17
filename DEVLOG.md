@@ -2046,3 +2046,147 @@ to go on. This is section B.
   Existing Phase 6 week-of-use and earlier release checks remain pending.
 - No GitHub commit was attempted for this UI revision.
 - Suggested commit: `Polish Phase 6 System UI and add full-page planner and tasks`.
+
+
+## 2026-11-17 — Daily focus is a single-session exception
+
+**Player request and rules**
+- Daily deep/focus work must have no Pause/Resume and be a one-session task.
+  Updated Phase6.md and SPEC with the authorized special case.
+- Shared engine identification uses DAILY scope and stable template keys
+  mind_deep_work / mind_phone_free_block, not localized task titles.
+- Task interface now offers Start, Finish and Discard without Pause/Resume
+  for those tasks. Duration measurement is fixed. Partial results cannot
+  accumulate: a single result must cover the full target. Explicit manual
+  full-session confirmation remains available under existing honour rules.
+
+**Implementation and edge cases**
+- Repository rejects Pause/Resume and changing these tasks to checkbox/count
+  modes. Starting/resuming another timer cannot silently pause running focus;
+  finish/discard it first. UI explains this and disables conflicting controls.
+- New focus contributions replace any pre-update partial aggregate only on
+  successful full completion; old session history is preserved. Manual direct
+  completion records a full-target contribution for this special case.
+- Same-boot navigation/background behaviour retains the running anchor.
+  Safe boot/restore recovery and old paused sessions retain their data and
+  offer Finish/Discard, with no Resume or invented elapsed time.
+- Ordinary/weekly tasks, standalone planner tasks and Hyperfocus retain their
+  existing behaviour. No migration, dependencies, permissions or XP changes.
+- Added four tests: pure-engine scope/template identification; both focus
+  templates' control/mode/recovery guards and weekly regression; conflicting
+  timer prevention; partial rejection and one full manual result with retry.
+  Added a single-session focus control Preview.
+
+**Validation and phone checks**
+- `test assembleDebug lintDebug`: BUILD SUCCESSFUL; all 375 tests pass with
+  zero failures/errors/skips, and no lint errors.
+- APK signature verified with the same certificate as the preceding APK.
+  `build/ASCENT-focus-debug.apk`, with previous convenience copies refreshed.
+  Size 44,005,381 bytes; version 1.1.0/build 2.
+- SHA-256: `61253300a703df6769bd48e4d77f56ffb5681e02556a0e4cc67675dd390b354a`.
+- Phone/emulator interaction was not performed. On each daily focus template,
+  verify no Pause/Resume, Finish/result/Discard, rejection of a short result,
+  full result completion and another timer's blocked start/resume. Also check
+  ordinary tasks still pause/resume and recovery preserves existing records.
+- Suggested commit: `Make daily focus work a single-session task`.
+
+
+## 2026-11-17 — Do not replace a completed automatic side quest on the same day
+
+**Problem and fix**
+- The player reported side quests returning after Done and authorized a fix.
+- SideQuestService checked only OPEN side quests when deciding whether today
+  already had an automatic balance quest. Completing it removed the issuance
+  guard, so a later cycle refresh could issue a replacement on the same day.
+- The guard now queries all non-removed SIDE quests issued on this game day,
+  including DONE, and checks TEMPLATE source. Existing open-slot limits remain.
+  Completed quests stay Done in today's view; new automatic quests can issue
+  on the next game day. Manual bounties remain available under existing limits.
+- Added a repository/cycle regression test: complete the automatic side quest,
+  refresh three times, verify the original is still Done with no extra quest
+  or XP, add a bounty, then advance and verify one new automatic quest appears.
+- No schema, dependency, permission or reward-number changes.
+
+**Validation and artifact**
+- `test assembleDebug lintDebug`: BUILD SUCCESSFUL; all 376 tests pass with
+  zero failures/errors/skips and no lint errors.
+- APK signature verified and certificate matches the previous APK.
+  `build/ASCENT-sidequest-fix-debug.apk` and `build/ASCENT-debug.apk` updated.
+  Size 44,978,721 bytes; version 1.1.0/build 2.
+- SHA-256: `3c44d0d9d0c3a108bd51bee279a5066b3e81d4b372f40eb55bdef5eec7e4a4cd`.
+- No phone/emulator interaction performed. Complete an automatic side quest,
+  reopen/refresh the app repeatedly, confirm it stays Done without a new one,
+  then check a new automatic side quest appears after the next daily reset.
+- Suggested commit: `Prevent same-day regeneration of completed side quests`.
+
+
+## 2026-11-17 — Study Mode: mission, orbital timer and measured rewards
+
+**Player authorization and specification**
+- Implemented the agreed Study Mode extension at the player's request. Added
+  the product/lifecycle/storage/visual/test plan to Phase6.md before coding;
+  coordinated SPEC, TODO and CLAUDE's Phase 6 reference.
+- Minimum 30 minutes, optional open Mind duration quest link requiring its
+  full target, and at most three starts per existing game day. Discarded,
+  incomplete and interrupted attempts still consume a start. No Pause/Resume.
+- Random original offline quote stays in the screen, persists with the attempt
+  and avoids consecutive repeats. No quote popup or network request.
+- Successful measured duration through exactly 60 minutes earns 30 Study XP;
+  strictly above 60 minutes earns 100. Early Finish/Discard earn zero. Finish
+  stops time; a required short learning debrief and optional next step precede
+  the single claim. Linked quest XP/planner bonus stay separate and idempotent.
+
+**Interface**
+- Large cyan/blue holographic Study Mode action in the Quest Log, with a locally
+  drawn book/sigil emblem and glowing Rajdhani heading. Dedicated full-page
+  navigation hides the bottom bar and uses the existing System backdrop.
+- Mission briefing, optional task selection, orbital timer with radial ticks,
+  readable elapsed/target time, persistent quote, Finish/Discard confirmations,
+  debrief, mission outcome and expandable full study archive. Entry/running/
+  briefing/debrief/completed Compose Previews included. All copy is in resources.
+- Static glows and reduced-motion-aware progress animation; labelled buttons,
+  accessible timer description, keyboard insets and saveable form/debrief state.
+- Early-finish confirmation explicitly preserves its promised zero-XP outcome
+  even if the target passes while the confirmation dialog is open.
+
+**Data and integration**
+- Additive Room v6 study_session entity/DAO, 5→6 migration and schema 6 JSON.
+  Preserves all existing records; populated planner/task-history migration test.
+- StudyRepository checks quota/active timers and claims inside transactions.
+  Monotonic timing survives same-boot navigation/process recreation, excluding
+  debrief time. Reboot/restore interrupts safely with no reward or invented time.
+  Sessions must fit before the daily reset; reset closes unfinished/pending work.
+- Existing generic timers/Hyperfocus cannot overlap Study. Linked quest sessions
+  are protected from generic controls/result saving and direct completion while
+  Study owns them. Study submits through the existing normal reward/planner path.
+- Whole-database backup/restore includes attempts, notes, quotes and claims;
+  restore finalization interrupts active Study/voids its marker. CSV export adds
+  study_sessions.csv with mission, time, state, debrief and separate XP amounts;
+  README and populated export/backup round-trip tests updated.
+- New XpSource.STUDY uses the existing level-up/grant/log path without quest
+  multipliers. App version 1.2.0/build 3, same SDKs, application id, dependencies,
+  permissions and signing certificate. Daily focus/side-quest fixes are retained.
+
+**Validation and artifact**
+- `test assembleDebug lintDebug`: BUILD SUCCESSFUL; all 392 tests pass,
+  zero failures/errors/skips and no lint errors.
+- Coverage includes strict XP boundary, minimum/linked duration, early outcomes,
+  concurrency, no reward replay, three-attempt quota/reset, timer/Hyperfocus
+  conflicts, linked quest/planner accounting, process/boot/restore recovery,
+  quote persistence/no repeats, additive migration and populated backup/export.
+- APK signature verifies and matches the previous APK. No INTERNET permission.
+  `build/ASCENT-study-debug.apk` and `build/ASCENT-debug.apk` refreshed.
+  Version 1.2.0/build 3; 43,434,741 bytes.
+- SHA-256: `5af6e067fbd8f02e58dadeb9c5d353d94f3fb421d21f7ed385ed77f5e80ce775`.
+
+**Open device checks**
+- Quest Log → Study Mode: check entry/ring aesthetics, scrolling, keyboard,
+  narrow screens/large text and Remove animations. Start a mission, leave and
+  return, verify the same quote and timer. Check Finish → debrief → claim,
+  early Finish and Discard with no XP, history and the three-start limit.
+- Test a linked quest, plan reward, daily reset and actual reboot/restore on a
+  phone. Automated fake-clock tests cover the 60-minute boundary; no physical
+  device/emulator interaction or visual screenshot validation was performed.
+- Existing week-of-use and earlier release/device exit checks remain open.
+- No GitHub commit attempted for this implementation.
+- Suggested commit: `Add Study Mode with daily quota, focus timer and XP rewards`.

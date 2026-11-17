@@ -5,6 +5,15 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 /** Schema migrations. Each one only adds: player data is never dropped or rewritten. */
 object Migrations {
+    /** v5 → v6: isolated, additive Study Mode attempt/history storage. */
+    val MIGRATION_5_6 = object : Migration(5, 6) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS study_session (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, day INTEGER NOT NULL, subject TEXT NOT NULL, objective TEXT NOT NULL, plannedSeconds INTEGER NOT NULL, quoteIndex INTEGER NOT NULL, questId INTEGER, taskSessionId TEXT, state TEXT NOT NULL, startedAt INTEGER NOT NULL, endsAt INTEGER NOT NULL, activeSeconds INTEGER NOT NULL, anchor INTEGER, boot INTEGER NOT NULL, endedAt INTEGER, learned TEXT NOT NULL, nextStep TEXT NOT NULL, xpAwarded INTEGER NOT NULL, questXpAwarded INTEGER NOT NULL)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_study_session_day ON study_session(day)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_study_session_questId ON study_session(questId)")
+        }
+    }
+
 
     /** v4 → v5: additive planner/session storage and explicit legacy progress. */
     val MIGRATION_4_5 = object : Migration(4, 5) {

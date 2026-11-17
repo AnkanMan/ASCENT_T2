@@ -95,6 +95,7 @@ class TestGame(dir: File, scope: CoroutineScope, dbName: String? = null) {
     val quests = QuestRepository(db, gameDay, time, events, rewards, random, settings, inventory, gates, arcs, achievements, skills, powers, trials, content, habits)
     val sessionClock = FakeSessionClock(context)
     val activities = com.tirthankar.ascent.data.repo.ActivityRepository(db, gameDay, sessionClock, com.tirthankar.ascent.data.repo.PlannerCoordinator(db, gameDay), quests, events, skills)
+    val study = com.tirthankar.ascent.data.repo.StudyRepository(db, gameDay, sessionClock, quests, skills, events)
     val effects = PowerEffects(db, powers, quests, skills, titles, settings, gameDay, events, time)
     val goals = GoalRepository(db, gameDay, time)
     val players = PlayerRepository(db, settings, titles, time, gameDay, random)

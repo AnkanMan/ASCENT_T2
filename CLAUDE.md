@@ -14,7 +14,7 @@ wins — point out the conflict instead of guessing.
 | File | Purpose |
 | --- | --- |
 | `SPEC.md` | Full design: mechanics, numbers, screens, architecture, roadmap |
-| `Phase6.md` | Tomorrow planner and shared task-session rules, tests and build order |
+| `Phase6.md` | Tomorrow planner, task sessions and Study Mode rules, tests and build order |
 | `TODO.md` | Checklist for the current phase. One task at a time, in order |
 | `DEVLOG.md` | Append-only session log: what changed, decisions, open issues |
 | `CLAUDE.md` | This file: how to work in this repo |

@@ -24,6 +24,65 @@ class PlannerSessionTest {
     private fun normal(target: Double = 40.0, scope: QuestScope = QuestScope.DAILY) =
         NewQuest("Push-ups", Realm.BODY, Stat.STR, Tier.TRIVIAL, target, "reps", scope)
 
+    private fun focus(key: String = "mind_deep_work", scope: QuestScope = QuestScope.DAILY) =
+        NewQuest("Focus on project", Realm.MIND, Stat.INT, Tier.TRIVIAL, 60.0, "min", scope, templateKey = key)
+
+    @Test fun `daily focus cannot pause resume or change away from duration`() = runTest {
+        val g = TestGame(folder.newFolder(), backgroundScope).also { game = it; it.awaken() }
+        for (key in listOf("mind_deep_work", "mind_phone_free_block")) {
+            val q = g.quests.add(focus(key))!!
+            val id = g.activities.start(questId = q)!!
+            assertFalse(g.activities.control(id, "PAUSE"))
+            assertFalse(g.activities.control(id, "RESUME"))
+            assertFalse(g.activities.setMode(q, "CHECKBOX"))
+            assertEquals("RUNNING", g.db.plannerDao().session(id)!!.state)
+            g.sessionClock.millis += 60_000
+            g.sessionClock.bootNumber++
+            g.activities.snapshot()
+            assertEquals("PAUSED", g.db.plannerDao().session(id)!!.state)
+            assertFalse(g.activities.control(id, "RESUME"))
+            assertTrue(g.activities.control(id, "DISCARD"))
+        }
+        val weekly = g.quests.add(focus(scope = QuestScope.WEEKLY))!!
+        val session = g.activities.start(questId = weekly)!!
+        assertTrue(g.activities.control(session, "PAUSE"))
+        assertTrue(g.activities.control(session, "RESUME"))
+    }
+
+    @Test fun `another timer cannot implicitly pause running daily focus`() = runTest {
+        val g = TestGame(folder.newFolder(), backgroundScope).also { game = it; it.awaken() }
+        val ordinary = g.quests.add(normal())!!
+        val other = g.activities.start(questId = ordinary)!!
+        assertTrue(g.activities.control(other, "PAUSE"))
+        val q = g.quests.add(focus())!!
+        val id = g.activities.start(questId = q)!!
+        assertFalse(g.activities.control(other, "RESUME"))
+        val third = g.quests.add(normal())!!
+        assertNull(g.activities.start(questId = third))
+        assertEquals("RUNNING", g.db.plannerDao().session(id)!!.state)
+        assertTrue(g.activities.control(id, "DISCARD"))
+        assertTrue(g.activities.control(other, "RESUME"))
+    }
+
+    @Test fun `daily focus rejects partial sessions but accepts one full result`() = runTest {
+        val g = TestGame(folder.newFolder(), backgroundScope).also { game = it; it.awaken() }
+        val q = g.quests.add(focus())!!
+        val target = g.db.questDao().getById(q)!!.target
+        val partial = g.activities.start(questId = q)!!
+        g.sessionClock.millis += 60_000
+        assertTrue(g.activities.control(partial, "FINISH"))
+        assertFalse(g.activities.saveResult(partial, target / 2))
+        assertEquals(0.0, g.db.questDao().getById(q)!!.actualProgress)
+        assertEquals(QuestStatus.OPEN, g.db.questDao().getById(q)!!.status)
+        assertTrue(g.activities.control(partial, "DISCARD"))
+        val full = g.activities.start(questId = q, manual = true)!!
+        assertTrue(g.activities.saveResult(full, target))
+        assertFalse(g.activities.saveResult(full, target))
+        assertEquals(target, g.db.questDao().getById(q)!!.actualProgress)
+        assertEquals(QuestStatus.DONE, g.db.questDao().getById(q)!!.status)
+        assertEquals(1, g.db.plannerDao().sessions().count { it.questId == q && it.state == "SAVED" })
+    }
+
     @Test fun `plan writes pay once and concurrent retries cannot farm XP`() = runTest {
         val g = TestGame(folder.newFolder(), backgroundScope).also { game = it; it.awaken() }
         val tomorrow = g.gameDay.today().toEpochDay() + 1

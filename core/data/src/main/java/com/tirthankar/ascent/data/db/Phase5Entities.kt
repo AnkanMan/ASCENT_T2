@@ -44,7 +44,7 @@ data class HabitSeriesCacheEntity(
 )
 
 /** What paid the XP in an [XpEventEntity]. An undo logs a negative amount from the same source. */
-enum class XpSource { QUEST, BOSS_TASK, BOSS, TRIAL, GATE, RANK_TRIAL, CHAPTER, UNBROKEN, OTHER, PLAN_WRITTEN, PLAN_COMPLETED }
+enum class XpSource { QUEST, BOSS_TASK, BOSS, TRIAL, GATE, RANK_TRIAL, CHAPTER, UNBROKEN, OTHER, PLAN_WRITTEN, PLAN_COMPLETED, STUDY }
 
 /**
  * Every XP grant from v4 on (for the export's xp_log.csv). [amount] is negative for an

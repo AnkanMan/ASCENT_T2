@@ -3,6 +3,13 @@ package com.tirthankar.ascent.engine
 import kotlin.test.*
 
 class PlannerRulesTest {
+    @Test fun `only daily focus templates require a single session`() {
+        assertTrue(PlannerRules.singleSessionFocus("mind_deep_work", true))
+        assertTrue(PlannerRules.singleSessionFocus("mind_phone_free_block", true))
+        assertFalse(PlannerRules.singleSessionFocus("mind_deep_work", false))
+        assertFalse(PlannerRules.singleSessionFocus("body_mobility", true))
+        assertFalse(PlannerRules.singleSessionFocus(null, true))
+    }
     @Test fun `empty and partially done lists never count as complete`() {
         assertFalse(PlannerRules.allDone(emptyList()))
         assertFalse(PlannerRules.allDone(listOf(true, false)))

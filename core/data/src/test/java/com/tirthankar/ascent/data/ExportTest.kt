@@ -66,6 +66,10 @@ class ExportTest {
         g.time.advance(Duration.ofDays(1))
         g.cycle.ensureUpToDate()
 
+        val study = g.study.start("Math, with notes", "Review limits", 1800)!!
+        g.sessionClock.millis += 1800_000
+        assertTrue(g.study.finish(study))
+        assertTrue(g.study.submit(study, "Practiced limits", "Continuity"))
         val out = ByteArrayOutputStream()
         ExportService(g.context, g.db, g.habits, g.gameDay, g.time).write(out)
         val files = unzip(out.toByteArray())
@@ -78,6 +82,10 @@ class ExportTest {
             assertEquals(columns, ExportReadme.columns(readme, name), "$name documented in order")
             assertTrue(rows.drop(1).all { it.size == columns.size }, "$name rows are complete")
         }
+
+        val studyRows = Csv.parse(files.getValue(ExportColumns.STUDY)).drop(1)
+        assertEquals("Math, with notes", studyRows.single()[ExportColumns.study.indexOf("subject")])
+        assertEquals("30", studyRows.single()[ExportColumns.study.indexOf("studyXp")])
 
         val quests = Csv.parse(files.getValue(ExportColumns.QUESTS)).drop(1)
         val title = ExportColumns.quests.indexOf("title")

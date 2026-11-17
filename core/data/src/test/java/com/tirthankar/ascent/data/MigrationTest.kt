@@ -372,6 +372,22 @@ class MigrationTest {
         }
     }
 
+    @Test
+    fun `migration 5 to 6 preserves populated planner and task history`() {
+        helper.createDatabase(DB, 1).use { insertPhase2Data(it) }
+        helper.runMigrationsAndValidate(DB, 5, true, Migrations.MIGRATION_1_2, Migrations.MIGRATION_2_3, Migrations.MIGRATION_3_4, Migrations.MIGRATION_4_5).use { db ->
+            db.execSQL("INSERT INTO day_plan (id,targetDay,state,createdAt,writtenAt,completedAt) VALUES (1,20403,'COMPLETED',1,1,2)")
+            db.execSQL("INSERT INTO plan_item (id,planId,position,title,questId,mode,target,unit,progress,done) VALUES (1,1,0,'Keep me',NULL,'COUNT',40,'reps',40,1)")
+            db.execSQL("INSERT INTO task_session (id,questId,itemId,state,startedAt,endsAt,activeSeconds,anchor,boot,endedAt,quantity,origin,note) VALUES ('kept',NULL,1,'SAVED',1,100,90,NULL,1,91,40,'MANUAL','kept note')")
+        }
+        helper.runMigrationsAndValidate(DB, 6, true, Migrations.MIGRATION_5_6).use { db ->
+            db.query("SELECT title,done FROM plan_item WHERE id=1").use { c -> assertTrue(c.moveToFirst()); assertEquals("Keep me",c.getString(0)); assertEquals(1,c.getInt(1)) }
+            db.query("SELECT activeSeconds,note FROM task_session WHERE id='kept'").use { c -> assertTrue(c.moveToFirst()); assertEquals(90L,c.getLong(0)); assertEquals("kept note",c.getString(1)) }
+            db.query("SELECT xpAwarded FROM quest WHERE publicId='qdone'").use { c -> assertTrue(c.moveToFirst()); assertEquals(126L,c.getLong(0)) }
+            db.query("SELECT COUNT(*) FROM study_session").use { c -> c.moveToFirst(); assertEquals(0,c.getInt(0)) }
+        }
+    }
+
     private companion object {
         const val DB = "migration-test"
     }

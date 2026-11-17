@@ -150,6 +150,7 @@ class PowerRepository @Inject constructor(
             if (targetKind == CastTargetKind.QUEST && targetId != null && def.handler in setOf(PowerHandlers.SECOND_WIND, PowerHandlers.FIRST_PRINCIPLES, PowerHandlers.LIMIT_BREAK)) {
                 if (db.questDao().getById(targetId)?.actualProgress?.let { it > 0 } == true || db.plannerDao().sessions().any { it.questId == targetId && it.state != "VOID" }) return@withTransaction CastResult.Refused(CastCheck.NotCastable)
             }
+            if (def.handler == PowerHandlers.HYPERFOCUS && db.studyDao().active() != null) return@withTransaction CastResult.Refused(CastCheck.NotCastable)
             if (def.handler == PowerHandlers.HYPERFOCUS && db.plannerDao().sessions().any { it.state == "RUNNING" || (it.questId == targetId && it.state in listOf("PAUSED", "RESULT")) }) return@withTransaction CastResult.Refused(CastCheck.NotCastable)
             val state = state() ?: return@withTransaction CastResult.Refused(CastCheck.NotUnlocked)
             val check = check(def, state, targetKind, targetId)

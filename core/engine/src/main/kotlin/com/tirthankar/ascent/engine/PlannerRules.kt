@@ -7,6 +7,10 @@ object PlannerRules {
     const val WRITING_XP = 10L
     const val COMPLETION_XP = 40L
 
+    /** Daily focus is completed in one uninterrupted session, independent of localized titles. */
+    fun singleSessionFocus(templateKey: String?, daily: Boolean): Boolean =
+        daily && templateKey in setOf("mind_deep_work", "mind_phone_free_block")
+
     fun allDone(items: List<Boolean>): Boolean = items.isNotEmpty() && items.all { it }
 
     fun mode(unit: TargetUnit): MeasurementMode = when (unit) {

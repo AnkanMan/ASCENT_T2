@@ -683,6 +683,11 @@ before discarding unsaved changes. The app bottom bar is hidden on these pages.
   and mastery are awarded once when the target is reached. Starting a session
   or saving partial progress pays nothing. Actual above-target results are
   retained without extra XP. One generic session can run at a time.
+- Daily `mind_deep_work` and `mind_phone_free_block` quests are single-session
+  exceptions: Start/Finish/Discard only, no Pause/Resume or partial accumulation.
+  A full-target result or manual full-session confirmation is required. Another
+  timer cannot implicitly pause them. Recovery/history remain safely preserved;
+  weekly quests, other tasks and the separate Hyperfocus power retain their rules.
 - Sessions persist through navigation/process restart, exclude pause time,
   and use monotonic timing. Boot/restore recovery pauses safely; generic
   sessions and Hyperfocus cannot run together. Ordinary sessions never grant
@@ -694,6 +699,36 @@ before discarding unsaved changes. The app bottom bar is hidden on these pages.
   new CSVs and explicit PLAN_WRITTEN/PLAN_COMPLETED XP sources.
 - Existing Claude `complete` is a manual full-completion confirmation, not
   proof of elapsed time; imports cannot replay rewards or override locks.
+
+### Study Mode (Phase 6 extension)
+
+A dedicated System-style screen, opened by a prominent glowing book/sigil button
+in the Quest Log. Subject, learning objective and a chosen duration of at least
+30 minutes; optionally link an open Mind duration quest and meet its full target.
+One uninterrupted Start → Finish session, no Pause/Resume. A random original
+motivational quote stays on the screen; avoid consecutive repeats and preserve
+it across navigation/restart. Timer uses monotonic time and keeps running in the
+same boot when the page/app is left.
+
+At most **three starts per game day**, counting incomplete/discarded attempts.
+Finish before the chosen target records an incomplete attempt for **zero XP**.
+Discard before claiming also grants **zero XP**. On successful Finish, a learning
+debrief plus optional next step precede a one-time Study XP claim: **30 XP** for
+completed measured duration from 30 through 60 minutes inclusive; **100 XP** for
+strictly more than 60 minutes. Study XP is an explicit separate grant without
+quest multipliers. Linked ordinary quest XP and planner completion still use
+their existing paths, once each.
+
+Only one Study attempt can be running/pending debrief. Other running timers and
+Hyperfocus block starting Study; Study protects its linked quest and blocks
+starting/resuming other timers. Three attempts reset at the existing daily reset;
+a session must fit before that reset. Reboot/restore safely interrupts an active
+attempt without XP, preserving checkpointed history. Reset closes unfinished
+attempts and pending debriefs without late rewards. Keep completed, incomplete,
+discarded and interrupted history, including mission, debrief, time and separate
+Study/quest reward amounts. Room **v6** adds the study_session table through an
+additive 5→6 migration; database backups include it and CSV export adds
+study_sessions.csv. Detailed implementation rules remain in `Phase6.md`.
 
 ## AI layer
 
@@ -793,7 +828,7 @@ Build in phases, each ending with something you actually use on your phone; neve
 
 **Release — ASCENT for friends.** Turn the personal build into an app friends can install, set up for themselves and update without losing data; no new game features. Buildable rules are in `RELEASE.md`; its decisions R1–R6 are folded into this document (Release).
 
-6. **Tomorrow planner and task sessions.** `Phase6.md` defines a tomorrow plan (+10 XP once on first valid save; +40 extra XP once after every committed item is complete) and shared task details with Start/Pause/Resume/Finish, manual logging and numerical progress. These bonuses are independent of normal quest XP. Same daily reset, no late rewards, additive Room v5 storage, session history and backup/export support. Real-phone exit checks remain required.
+6. **Tomorrow planner, task sessions and Study Mode.** `Phase6.md` defines a tomorrow plan (+10 XP once on first valid save; +40 extra XP once after every committed item is complete) and shared task details with Start/Pause/Resume/Finish, manual logging and numerical progress. These bonuses are independent of normal quest XP. Same daily reset, no late rewards, additive Room v5 planner/session storage plus v6 Study Mode, session history and backup/export support. Study Mode adds a 30-minute minimum, three starts per game day, persistent random quotes and 30/100 XP measured completion rewards. Real-phone exit checks remain required.
 
 7. **Integrations (after the Release, as a normal update).** Health Connect, focus-timer verification, the home-screen widget, check-in notifications that open Ask the System, and weekly charts. (The Focus Session itself shipped in Phase 4.)
 

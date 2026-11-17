@@ -38,6 +38,10 @@ class PlannerCoordinator @Inject constructor(private val db: AscentDatabase, pri
         }
         val now = day.now().toEpochMilli()
         val clock = day.clock()
+        db.studyDao().active()?.let { study ->
+            val end = clock.dayStart(LocalDate.ofEpochDay(study.day + 1)).toEpochMilli()
+            if (study.day != today || end <= now) db.interruptStudy(study, "INCOMPLETE", now)
+        }
         dao.sessions().filter { it.state in listOf("RUNNING", "PAUSED", "RESULT") }.forEach { session ->
             val q = session.questId?.let { db.questDao().getById(it) }
             val item = session.itemId?.let { dao.item(it) }

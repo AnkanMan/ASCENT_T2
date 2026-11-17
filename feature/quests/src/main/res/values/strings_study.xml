@@ -1,0 +1,62 @@
+<resources>
+    <string name="study_title">Study Mode</string>
+    <string name="study_entry_hint">Enter focus. Build knowledge. Up to 3 sessions a day.</string>
+    <string name="study_protocol">Study protocol</string>
+    <string name="study_allowance">Attempts today · %1$d / %2$d</string>
+    <string name="study_rules">One uninterrupted mission. Minimum 30 minutes. Completed sessions earn 30 XP up to 60 minutes, or 100 XP above 60 minutes. Every start uses an attempt.</string>
+    <string name="study_mission">Mission briefing</string>
+    <string name="study_subject">Subject</string>
+    <string name="study_objective">What will you accomplish?</string>
+    <string name="study_minutes">Session duration (minutes)</string>
+    <string name="study_duration_hint">At least 30 minutes and the full linked task target. The session must fit before the daily reset.</string>
+    <string name="study_link_label">Optional task link</string>
+    <string name="study_unlinked">Independent study mission</string>
+    <string name="study_link_gone">That task is no longer available. Choose another task or an independent mission.</string>
+    <string name="study_other_timer">Finish, pause or discard your other timer before entering Study Mode. Hyperfocus must be ended first.</string>
+    <string name="study_limit">Three attempts used. Your next study allowance opens at the daily reset.</string>
+    <string name="study_start">Enter Study Mode</string>
+    <string name="study_focus_label">Focus engaged</string>
+    <string name="study_target_time">Target · %1$s</string>
+    <string name="study_ring_description">Studied %1$s. Target %2$s.</string>
+    <string name="study_leave_hint">You can leave this screen; time keeps running in the same boot. Reboot, restore or daily reset ends an unfinished attempt without XP. No Pause or Resume.</string>
+    <string name="study_finish_early">Finish early · 0 XP</string>
+    <string name="study_discard">Discard · 0 XP</string>
+    <string name="study_discard_title">Discard this mission?</string>
+    <string name="study_early_title">End before the target?</string>
+    <string name="study_zero_confirmation">This attempt will stay in history, use one of today’s three starts and earn no XP or linked task progress.</string>
+    <string name="study_keep_studying">Keep studying</string>
+    <string name="study_debrief">Learning debrief</string>
+    <string name="study_ready_reward">Mission target reached · +%1$d Study XP ready</string>
+    <string name="study_learned">What did you learn or complete?</string>
+    <string name="study_next_step">Next step (optional)</string>
+    <string name="study_save">Save debrief and claim XP</string>
+    <string name="study_history">Study archive</string>
+    <string name="study_history_empty">Your first mission awaits. Completed, incomplete and discarded attempts will appear here.</string>
+    <string name="study_all_history">Show full archive</string>
+    <string name="study_running">Mission in progress</string>
+    <string name="study_completed">Mission accomplished</string>
+    <string name="study_incomplete">Incomplete · no XP</string>
+    <string name="study_discarded">Discarded · no XP</string>
+    <string name="study_interrupted">Interrupted · no XP</string>
+    <string name="study_history_duration">Studied %1$s · target %2$s</string>
+    <string name="study_rewards">Study XP: %1$d · Linked quest XP: %2$d</string>
+    <string name="study_next_mission">Next mission: %1$s</string>
+    <string name="study_refused">Unable to apply this action. Check your daily attempts, other timers, linked task, required duration and time before the daily reset.</string>
+    <string name="study_managed_task">This task session is controlled in Study Mode. Return there to finish or discard it.</string>
+    <string name="study_open">Open Study Mode</string>
+    <string name="study_blocks_timer">Complete or discard the active Study mission before starting or resuming another timer.</string>
+    <string-array name="study_quotes">
+        <item>One clear objective. One deliberate step. Begin.</item>
+        <item>Understanding grows where your attention stays.</item>
+        <item>Build the knowledge your next challenge will need.</item>
+        <item>A difficult page is an invitation to think more carefully.</item>
+        <item>Give this moment a purpose, then give it your attention.</item>
+        <item>Every question you untangle leaves a stronger foundation.</item>
+        <item>Progress can be quiet. Keep working with intention.</item>
+        <item>Master this step. The next one will become clearer.</item>
+        <item>Today’s practice is tomorrow’s confidence.</item>
+        <item>You do not need every answer to make a meaningful start.</item>
+        <item>Turn curiosity into a question, and the question into action.</item>
+        <item>Let careful work become something you can build upon.</item>
+    </string-array>
+</resources>

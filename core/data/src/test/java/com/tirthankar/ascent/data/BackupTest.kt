@@ -101,6 +101,10 @@ class BackupTest {
         val sessionQuest = g.quests.add(mine("Measured errand"))!!
         val sessionId = g.activities.start(questId = sessionQuest, manual = true)!!
         g.activities.saveResult(sessionId, 1.0)
+        val studyId = g.study.start("Mathematics", "Review substitution", 1800)!!
+        g.sessionClock.millis += 1800_000
+        assertTrue(g.study.finish(studyId))
+        assertTrue(g.study.submit(studyId, "Practiced substitution", "Try integration by parts"))
         val zip = g.backupTo(folder.newFolder("out"))
         val before = dump(g.db)
         val settings = g.paths.datastore.readBytes()

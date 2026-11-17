@@ -58,6 +58,7 @@ import java.util.Locale
 @Composable
 fun QuestLogRoute(
     modifier: Modifier = Modifier,
+    onOpenStudy: () -> Unit = {},
     onOpenPlanner: () -> Unit = {},
     onOpenTask: (TaskSelection) -> Unit = {},
     viewModel: QuestLogViewModel = hiltViewModel(),
@@ -65,7 +66,7 @@ fun QuestLogRoute(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val activities: ActivitiesViewModel = hiltViewModel()
     Materialize(modifier) {
-        QuestLogScreen(state, { event -> if (event is QuestLogEvent.OpenTask) onOpenTask(TaskSelection(questId = event.questId)) else viewModel.onEvent(event) }, activityHub = { ActivityHub(onOpenPlanner, onOpenTask, activities) })
+        QuestLogScreen(state, { event -> if (event is QuestLogEvent.OpenTask) onOpenTask(TaskSelection(questId = event.questId)) else viewModel.onEvent(event) }, activityHub = { ActivityHub(onOpenPlanner, onOpenTask, onOpenStudy, activities) })
     }
     state.questForm?.let { QuestFormDialog(it, state.goals, viewModel::onEvent) }
     state.goalForm?.let { GoalFormDialog(it, viewModel::onEvent) }

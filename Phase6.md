@@ -1,4 +1,4 @@
-# Phase 6 — Tomorrow planner and task sessions
+# Phase 6 — Tomorrow planner, task sessions and Study Mode
 
 Implementation specification · 2026-11-17
 
@@ -302,6 +302,25 @@ library, permission or AI call is needed for the initial implementation.
 Keep quick completion for checkbox tasks and manual logging for work done
 without starting the timer. Do not require a timer for every activity.
 
+### Daily focus special case
+
+The player requested on 2026-11-17 that daily deep work and phone-free focus
+be single-session tasks. Identify these by the stable `mind_deep_work` and
+`mind_phone_free_block` template keys and DAILY scope, never by display title.
+
+- Show Start, Finish and Discard; never Pause or Resume. Keep duration mode.
+- One result must cover the whole target; partial sessions cannot accumulate
+  toward completion. Manual full-session confirmation remains available.
+- A running focus session cannot be implicitly paused by starting/resuming
+  another timer: finish or discard it first. Ordinary tasks keep pause/resume.
+- Navigation/backgrounding in the same boot keeps the timer running. Existing
+  paused sessions and safe reboot/restore recovery can be finished or discarded,
+  but not resumed; do not erase history or fabricate time.
+- Implement shared engine identification, repository enforcement, task controls
+  and explanatory strings. Test pause/resume rejection, timer conflicts, partial
+  rejection/full completion and weekly/ordinary-task regression behaviour.
+- No schema change or change to the separate Hyperfocus power is needed.
+
 ### Explicit measurement modes
 
 | Mode | Examples | Result entry and completion |
@@ -547,3 +566,68 @@ persistence and a backup/restore round trip. No new dependency, permission,
 AI API or server is required.
 Include timed and manually logged tasks during the week, with at least one
 multi-session numerical task and a session interrupted by a daily reset.
+
+
+## Study Mode — approved extension (2026-11-17)
+
+Implement the player's agreed Study Mode as a dedicated System screen and a
+prominent special button in the Quest Log, next to the planner entry.
+
+### Product rules
+
+1. Mission briefing: subject, concrete objective and chosen duration ≥30 minutes.
+   An optional link to an open Mind duration quest requires the session duration
+   to cover the full quest target as well as the 30-minute minimum.
+2. Motivational quote: randomly select an original local quote at each start,
+   avoid a consecutive repeat, persist the selection and keep it on the Study
+   screen. No popup, network request or repeated reroll on recomposition.
+3. Immersive timer: blue/cyan System ring, readable monotonic elapsed time,
+   chosen duration, objective and progress. No Pause or Resume. Leaving the
+   page/backgrounding does not stop a same-boot timer.
+4. Finish stops measured time. Meeting the chosen duration opens a debrief;
+   ending early records an incomplete attempt with zero XP. Discard remains
+   available before reward submission and always grants zero XP.
+5. Debrief: what was learned and optional next step. Save grants exactly 30 XP
+   for completed elapsed time from 30 through 60 minutes inclusive, or 100 XP
+   strictly above 60 minutes. This explicit Study reward is separate from normal
+   linked-quest XP, which can only pay through the existing path once.
+6. Results/history: subject/objective, elapsed/target duration, outcome, debrief,
+   next step, Study XP and linked quest XP. Keep incomplete/discarded attempts.
+7. At most three starts per existing game day, counting all incomplete and
+   discarded starts. Limit checked transactionally, never just in the UI.
+
+### Persistence and compatibility
+
+- Add Room v6 study_session table and additive 5→6 migration/schema test.
+  Persist day, mission, chosen seconds, quote index, optional linked quest/task
+  session IDs, state, monotonic anchor/boot, checkpointed seconds, end boundary,
+  debrief and separate reward amounts. START consumes a slot; refresh/retry does
+  not. Completion/reward submission is transactional and idempotent.
+- One Study attempt may be RUNNING/RESULT at a time. Generic running timers and
+  Hyperfocus block starting Study; Study blocks starting/resuming those timers.
+  A linked quest gets a protected task-session marker so target edits/removals
+  and other completion routes cannot rewrite the active mission.
+- Same-boot process restart recovers elapsed time from the anchor. Reboot/restore
+  safely ends the attempt as INTERRUPTED, preserving checkpointed history, no XP
+  and no Resume. Daily reset ends unfinished/pending attempts without XP; start
+  rejects durations that cannot fit before the current daily reset. No fabricated
+  time, migration rewrite, new permission, service or internet dependency.
+- Whole-database backups preserve the table; restore finalization interrupts
+  active attempts and closes linked markers. Add study_sessions.csv to export.
+- Keep existing planner, task sessions, daily focus exception and side-quest fix.
+
+### Visual implementation and validation
+
+Use existing HoloPanel corner brackets, dark hex-grid background, Rajdhani titles,
+monospace timer/XP and SystemBlue/GlowCyan. Entry button has a large book/sigil
+emblem, glowing title and session allowance. Main page has a dedicated orbital
+ring, persistent quote panel, distinct mission/debrief/history sections and
+full-width ≥48 dp controls. Confirmation protects Discard and an early Finish.
+Reuse reduced-motion-aware components; no mandatory looping animation.
+
+Files: engine StudyRules + tests; data entity/DAO/migration, StudyRepository and
+recovery/backup/export/timer guards + tests; quests StudyMode composables/ViewModel,
+entry and app navigation/resources; SPEC/TODO/DEVLOG updates. Build order: rules,
+storage, lifecycle/reward integration, UI, migration/repository/backup/export tests,
+then test/assembleDebug/lintDebug and signed debug APK. Phone visual/navigation,
+clock recovery, quota and exact 60-minute reward checks remain explicit device QA.

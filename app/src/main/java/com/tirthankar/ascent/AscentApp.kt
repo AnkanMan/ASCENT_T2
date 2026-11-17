@@ -60,6 +60,7 @@ import com.tirthankar.ascent.feature.gates.GatesRoute
 import com.tirthankar.ascent.feature.inventory.InventoryRoute
 import com.tirthankar.ascent.feature.quests.QuestLogRoute
 import com.tirthankar.ascent.feature.quests.PlannerRoute
+import com.tirthankar.ascent.feature.quests.StudyRoute
 import com.tirthankar.ascent.feature.quests.TaskActivityRoute
 import com.tirthankar.ascent.feature.skills.ClassAwakeningHost
 import com.tirthankar.ascent.feature.skills.FocusSessionHost
@@ -74,6 +75,8 @@ import kotlin.reflect.KClass
 
 /** Bottom-bar destinations (D8, D10; Phase 4 adds Skills): Status · Quests · Console · Gates · Skills. */
 @Serializable data object StatusDestination
+
+@Serializable data object StudyDestination
 
 @Serializable data object PlannerDestination
 
@@ -175,7 +178,7 @@ private fun rememberBackupPickers(): BackupPickers {
 private fun MainShell(viewModel: MainViewModel, openConsole: Boolean, onConsoleOpened: () -> Unit) {
     val nav = rememberNavController()
     val pageEntry by nav.currentBackStackEntryAsState()
-    val activityPage = pageEntry?.destination?.let { it.hasRoute<PlannerDestination>() || it.hasRoute<TaskActivityDestination>() } == true
+    val activityPage = pageEntry?.destination?.let { it.hasRoute<PlannerDestination>() || it.hasRoute<TaskActivityDestination>() || it.hasRoute<StudyDestination>() } == true
     val levelUp by viewModel.levelUp.collectAsStateWithLifecycle()
     val loot by viewModel.loot.collectAsStateWithLifecycle()
     val notices by viewModel.notices.collectAsStateWithLifecycle()
@@ -208,16 +211,18 @@ private fun MainShell(viewModel: MainViewModel, openConsole: Boolean, onConsoleO
                 }
                 composable<QuestsDestination> {
                     QuestLogRoute(
+                        onOpenStudy = { nav.navigate(StudyDestination) },
                         onOpenPlanner = { nav.navigate(PlannerDestination) },
                         onOpenTask = { nav.navigate(TaskActivityDestination(it.questId, it.itemId)) },
                     )
                 }
+                composable<StudyDestination> { StudyRoute(onBack = { nav.popBackStack() }) }
                 composable<PlannerDestination> {
                     PlannerRoute(onBack = { nav.popBackStack() }, onOpenTask = { nav.navigate(TaskActivityDestination(it.questId, it.itemId)) })
                 }
                 composable<TaskActivityDestination> { entry ->
                     val task = entry.toRoute<TaskActivityDestination>()
-                    TaskActivityRoute(task.questId, task.itemId, onBack = { nav.popBackStack() })
+                    TaskActivityRoute(task.questId, task.itemId, onBack = { nav.popBackStack() }, onOpenStudy = { nav.navigate(StudyDestination) { launchSingleTop = true } })
                 }
                 composable<ConsoleDestination> { ConsoleRoute() }
                 composable<GatesDestination> { GatesRoute(onOpenBoss = { id -> nav.navigate(BossArenaDestination(id)) }) }

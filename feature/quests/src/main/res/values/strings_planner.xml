@@ -85,4 +85,6 @@
     <string name="activity_time_label">Active time</string>
     <string name="planner_invalid_target">Use a positive target, whole numbers for counts, and seconds, minutes or hours for duration.</string>
     <string name="planner_add_before_save">Add or update the objective above before saving your plan.</string>
+    <string name="activity_focus_single">Single-session focus: complete the full target in one sitting. No pause or resume; partial results cannot be combined. Finish and record a full session, or discard and start again.</string>
+    <string name="activity_focus_blocking">Finish or discard your running focus session before starting or resuming another timer.</string>
 </resources>

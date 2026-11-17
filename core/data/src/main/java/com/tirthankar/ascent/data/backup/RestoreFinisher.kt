@@ -7,6 +7,7 @@ import com.tirthankar.ascent.data.GameEvents
 import com.tirthankar.ascent.data.TimeSource
 import com.tirthankar.ascent.data.db.AscentDatabase
 import com.tirthankar.ascent.data.repo.LoreRepository
+import com.tirthankar.ascent.data.repo.interruptStudy
 import com.tirthankar.ascent.data.settings.BackupPrefs
 import com.tirthankar.ascent.data.settings.RestoreRecord
 import com.tirthankar.ascent.engine.BackupManifestCodec
@@ -49,6 +50,7 @@ class RestoreFinisher @Inject constructor(
             actual != null && actual >= expected
         }
         db.withTransaction {
+            db.studyDao().active()?.let { db.interruptStudy(it, "INTERRUPTED", time.now().toEpochMilli()) }
             db.plannerDao().sessions().filter { it.state == "RUNNING" }.forEach {
                 db.plannerDao().update(it.copy(state = "PAUSED", anchor = null, note = "RESTORE_RECOVERY"))
             }

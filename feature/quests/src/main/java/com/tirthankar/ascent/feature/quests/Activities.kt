@@ -131,12 +131,14 @@ class ActivitiesViewModel @Inject constructor(private val repository: ActivityRe
 internal fun ActivityHub(
     onOpenPlanner: () -> Unit,
     onOpenTask: (TaskSelection) -> Unit,
+    onOpenStudy: () -> Unit,
     viewModel: ActivitiesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        StudyEntry(onOpenStudy)
         PlannerEntry(onOpenPlanner)
-        state.data?.sessions?.firstOrNull { it.state in listOf("RUNNING", "PAUSED", "RESULT") }?.let { session ->
+        state.data?.sessions?.firstOrNull { it.state in listOf("RUNNING", "PAUSED", "RESULT") && !(state.data?.studyActive == true && it.questId == state.data?.studyQuestId) }?.let { session ->
             OutlinedButton(onClick = { onOpenTask(TaskSelection(session.questId, session.itemId)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.activity_resume_banner, duration(state.seconds[session.id] ?: session.activeSeconds)))
             }
@@ -191,15 +193,15 @@ fun PlannerRoute(onBack: () -> Unit, onOpenTask: (TaskSelection) -> Unit, viewMo
 }
 
 @Composable
-fun TaskActivityRoute(questId: Long?, itemId: Long?, onBack: () -> Unit, viewModel: ActivitiesViewModel = hiltViewModel()) {
+fun TaskActivityRoute(questId: Long?, itemId: Long?, onBack: () -> Unit, onOpenStudy: () -> Unit = {}, viewModel: ActivitiesViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(questId, itemId) { viewModel.selectTask(TaskSelection(questId, itemId)) }
     val actions = object : ActivityActions by viewModel { override fun closeTask() = onBack() }
-    TaskScreen(state, actions)
+    TaskScreen(state, actions, onOpenStudy)
 }
 
 @Composable
-private fun ActivityPage(title: String, onBack: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
+internal fun ActivityPage(title: String, onBack: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
     Column(Modifier.fillMaxSize().imePadding()) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             TextButton(onClick = onBack, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.activity_back)) }
@@ -211,7 +213,7 @@ private fun ActivityPage(title: String, onBack: () -> Unit, content: @Composable
 }
 
 @Composable
-private fun ActivityPanel(header: String? = null, content: @Composable ColumnScope.() -> Unit) {
+internal fun ActivityPanel(header: String? = null, content: @Composable ColumnScope.() -> Unit) {
     HoloPanel(Modifier.fillMaxWidth(), header = header) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
     }
@@ -340,7 +342,7 @@ private fun PlannerScreen(state: ActivitiesUi, vm: ActivityActions, initialTab: 
 }
 
 @Composable
-private fun TaskScreen(state: ActivitiesUi, vm: ActivityActions) {
+private fun TaskScreen(state: ActivitiesUi, vm: ActivityActions, onOpenStudy: () -> Unit = {}) {
     val data = state.data
     val owner = state.task
     if (data == null || owner == null) {
@@ -353,7 +355,8 @@ private fun TaskScreen(state: ActivitiesUi, vm: ActivityActions) {
         ActivityPage(stringResource(R.string.activity_open), vm::closeTask) { Text(stringResource(R.string.activity_inactive)) }
         return
     }
-    val mode = quest?.let { if (it.measurementMode == "AUTO") PlannerRules.mode(it.unit) else MeasurementMode.valueOf(it.measurementMode) }
+    val singleFocus = quest?.let { PlannerRules.singleSessionFocus(it.templateKey, it.scope == QuestScope.DAILY) } == true
+    val mode = if (singleFocus) MeasurementMode.DURATION else quest?.let { if (it.measurementMode == "AUTO") PlannerRules.mode(it.unit) else MeasurementMode.valueOf(it.measurementMode) }
     ?: MeasurementMode.valueOf(item!!.mode)
     val title = quest?.title ?: item!!.title
     val target = quest?.target ?: item!!.target
@@ -368,10 +371,12 @@ private fun TaskScreen(state: ActivitiesUi, vm: ActivityActions) {
     val plan = item?.let { i -> data.plans.find { it.id == i.planId } }
     val active = if (quest != null) quest.status == QuestStatus.OPEN && quest.day == (if (quest.scope == QuestScope.DAILY) data.today else GameClock.weekStart(LocalDate.ofEpochDay(data.today)).toEpochDay())
     else plan?.targetDay == data.today && plan.completedAt == null && item?.done == false
+    val studyManaged = quest != null && data.studyActive && data.studyQuestId == quest.id
     val supported = quest == null || quest.kind == QuestKind.NORMAL
     val reset = java.time.Instant.ofEpochMilli(data.nextReset).atZone(java.time.ZoneId.systemDefault())
     val expiry = session?.endsAt ?: if (quest?.scope == QuestScope.WEEKLY) LocalDate.ofEpochDay(quest.day + 7).atTime(reset.toLocalTime()).atZone(reset.zone).toInstant().toEpochMilli() else data.nextReset
     val otherRunning = data.sessions.any { it.state == "RUNNING" && (it.questId != owner.questId || it.itemId != owner.itemId) }
+    val blockingFocus = data.sessions.any { s -> s.state == "RUNNING" && (s.questId != owner.questId || s.itemId != owner.itemId) && data.quests.find { it.id == s.questId }?.let { PlannerRules.singleSessionFocus(it.templateKey, it.scope == QuestScope.DAILY) } == true }
     ActivityPage(stringResource(R.string.activity_page_title), vm::closeTask) {
         ActivityPanel(stringResource(R.string.activity_objective)) {
             Text(title, style = MaterialTheme.typography.headlineLarge, color = AscentColors.GlowCyan)
@@ -380,12 +385,15 @@ private fun TaskScreen(state: ActivitiesUi, vm: ActivityActions) {
             Spacer(Modifier.height(12.dp))
             Text(stringResource(R.string.activity_progress, progress.toString(), target.toString(), unit), style = AscentTextStyles.Number, color = AscentColors.GlowCyan)
             Text(stringResource(R.string.activity_period_end, java.time.Instant.ofEpochMilli(expiry).atZone(java.time.ZoneId.systemDefault()).toLocalDateTime().toString()))
-            Text(stringResource(if (quest != null) R.string.activity_quest_rewards else R.string.activity_planner_rewards))
+            Text(stringResource(if (singleFocus) R.string.activity_focus_single else if (quest != null) R.string.activity_quest_rewards else R.string.activity_planner_rewards))
         }
         if (!active) Text(stringResource(R.string.activity_inactive))
-        if (quest != null && active && history.isEmpty() && progress == 0.0) ModePicker(mode) { vm.mode(quest.id, it.name) }
-        if (session != null) {
-            SessionPanel(session.state, duration(seconds), state.busy, { vm.control(session.id, it) })
+        if (!singleFocus && quest != null && active && history.isEmpty() && progress == 0.0) ModePicker(mode) { vm.mode(quest.id, it.name) }
+        if (studyManaged) {
+            Text(stringResource(R.string.study_managed_task), color = AscentColors.GlowCyan)
+            Button(onClick = onOpenStudy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.study_open)) }
+        } else if (session != null) {
+            SessionPanel(session.state, duration(seconds), state.busy, { vm.control(session.id, it) }, singleFocus = singleFocus, canResume = !blockingFocus && !data.studyActive)
             if (session.note in listOf("CLOCK_RECOVERY", "RESTORE_RECOVERY")) Text(stringResource(R.string.activity_recovered))
             if (session.state == "RESULT" && active) {
                 ActivityPanel(stringResource(R.string.activity_result_header)) {
@@ -394,15 +402,17 @@ private fun TaskScreen(state: ActivitiesUi, vm: ActivityActions) {
                     }
                     OutlinedTextField(note, { note = it }, modifier = Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.activity_note)) })
                     val amount = if (mode == MeasurementMode.CHECKBOX) target else result.toDoubleOrNull()
-                    Button(modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp), enabled = !state.busy && amount != null && PlannerRules.validResult(amount, mode), onClick = {
+                    Button(modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp), enabled = !state.busy && amount != null && PlannerRules.validResult(amount, mode) && (!singleFocus || amount >= target), onClick = {
                             vm.saveResult(session.id, amount!!, mode == MeasurementMode.DURATION && amount != measured, note)
                     }) { Text(stringResource(R.string.activity_save)) }
                 }
             }
         } else if (active && supported) {
-            Button(modifier = Modifier.fillMaxWidth().heightIn(min = 60.dp), onClick = { vm.start(false) }, enabled = !state.busy) { Text(stringResource(if (otherRunning) R.string.activity_start_other else R.string.activity_start)) }
-            OutlinedButton(modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), onClick = { vm.start(true) }, enabled = !state.busy) { Text(stringResource(R.string.activity_log)) }
+            Button(modifier = Modifier.fillMaxWidth().heightIn(min = 60.dp), onClick = { vm.start(false) }, enabled = !state.busy && !blockingFocus && !data.studyActive) { Text(stringResource(if (otherRunning) R.string.activity_start_other else R.string.activity_start)) }
+            OutlinedButton(modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), onClick = { vm.start(true) }, enabled = !state.busy && !data.studyActive) { Text(stringResource(R.string.activity_log)) }
         }
+        if (data.studyActive && !studyManaged) Text(stringResource(R.string.study_blocks_timer), color = AscentColors.GlowCyan)
+        if (blockingFocus) Text(stringResource(R.string.activity_focus_blocking), color = AscentColors.GlowCyan)
         SystemHeader(stringResource(R.string.activity_history))
         if (history.isEmpty()) Text(stringResource(R.string.activity_no_history), color = AscentColors.Mist)
         history.forEach { h ->
@@ -445,12 +455,12 @@ private fun ModePicker(selected: MeasurementMode, change: (MeasurementMode) -> U
 }
 
 @Composable
-private fun SessionPanel(state: String, elapsed: String, busy: Boolean, control: (String) -> Unit) {
+private fun SessionPanel(state: String, elapsed: String, busy: Boolean, control: (String) -> Unit, singleFocus: Boolean = false, canResume: Boolean = true) {
     ActivityPanel(stateLabel(state)) {
         Text(stringResource(R.string.activity_time_label), style = AscentTextStyles.SystemLabel, color = AscentColors.Mist)
         Text(elapsed, style = AscentTextStyles.NumberLarge, color = AscentColors.GlowCyan)
         if (state != "RESULT") {
-            Button(onClick = { control(if (state == "RUNNING") "PAUSE" else "RESUME") }, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+            if (!singleFocus) Button(onClick = { control(if (state == "RUNNING") "PAUSE" else "RESUME") }, enabled = !busy && (state == "RUNNING" || canResume), modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                 Text(stringResource(if (state == "RUNNING") R.string.activity_pause else R.string.activity_resume))
             }
             OutlinedButton(onClick = { control("FINISH") }, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.activity_finish)) }
@@ -525,3 +535,7 @@ private fun TomorrowPlannerPreview() { AscentTheme { SystemBackground { PlannerS
 @Preview(name = "Planner history", widthDp = 400, heightDp = 800)
 @Composable
 private fun PlannerHistoryPreview() { AscentTheme { SystemBackground { PlannerScreen(sampleActivity("EXPIRED"), PreviewActivityActions, initialTab = 2) } } }
+
+@Preview(name = "Single-session daily focus", widthDp = 400)
+@Composable
+private fun SingleFocusPreview() { AscentTheme { SystemBackground { SessionPanel("RUNNING", "00:12:30", false, {}, singleFocus = true) } } }

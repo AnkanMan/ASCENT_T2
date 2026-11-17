@@ -76,7 +76,9 @@ object ExportColumns {
     val plans = listOf("id", "targetDay", "state", "writtenAt", "completedAt")
     val planItems = listOf("id", "planId", "position", "title", "questId", "mode", "target", "unit", "progress", "done")
     val sessions = listOf("id", "questId", "itemId", "state", "startedAt", "endsAt", "activeSeconds", "endedAt", "quantity", "origin", "note")
-    val files: Map<String, List<String>> = linkedMapOf(QUESTS to quests, DAILY to daily, HABITS to habits, XP_LOG to xpLog, PLANS to plans, PLAN_ITEMS to planItems, SESSIONS to sessions)
+    const val STUDY = "study_sessions.csv"
+    val study = listOf("id", "day", "subject", "objective", "questId", "state", "plannedSeconds", "activeSeconds", "startedAt", "endedAt", "quoteIndex", "learned", "nextStep", "studyXp", "questXp")
+    val files: Map<String, List<String>> = linkedMapOf(QUESTS to quests, DAILY to daily, HABITS to habits, XP_LOG to xpLog, PLANS to plans, PLAN_ITEMS to planItems, SESSIONS to sessions, STUDY to study)
 }
 
 /** Reads the column list for one file out of the README: indented `name:` lines under its heading. */

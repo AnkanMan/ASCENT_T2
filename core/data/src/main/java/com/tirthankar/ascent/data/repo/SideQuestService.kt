@@ -114,7 +114,8 @@ class SideQuestService @Inject constructor(
 
         // Balance: one side quest per reset, aimed at the weakest realm of the last 7 days.
         val open = questDao.getOpenSide(epoch)
-        val issuedToday = open.any { it.day == epoch && it.source == QuestSource.TEMPLATE }
+        // A completed balance quest still consumes today's automatic issue.
+        val issuedToday = questDao.getKindOnDay(QuestKind.SIDE, epoch).any { it.source == QuestSource.TEMPLATE }
         if (!issuedToday && SideQuestRules.shouldIssueBalance(open.size)) {
             val week = db.snapshotDao().getRange(epoch - 7, epoch - 1)
             val realm = SideQuestRules.balanceRealm(

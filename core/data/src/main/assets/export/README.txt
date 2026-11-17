@@ -128,3 +128,27 @@ sessions.csv — Phase 6 records
 Session state SAVED contributes to progress; VOID and EXPIRED do not. A questId and itemId are mutually exclusive. TIMER and MANUAL distinguish the result origin. Running duration is checkpointed; a restored session pauses and does not count restore downtime.
 
 Timed count/distance results remain self-reported: TIMER records that a timer was used, not automatic verification of the quantity.
+
+
+study_sessions.csv — Study Mode attempts, including incomplete and discarded starts
+  id: Study attempt id.
+  day: Game day when the attempt started; at most three starts per day.
+  subject: Study subject.
+  objective: Session mission.
+  questId: Optional linked normal quest id.
+  state: RUNNING, RESULT, COMPLETED, INCOMPLETE, DISCARDED or INTERRUPTED.
+  plannedSeconds: Required continuous study duration (at least 1800 seconds).
+  activeSeconds: Safely measured/checkpointed duration; no pause/resume.
+  startedAt: Start timestamp.
+  endedAt: End timestamp, if stopped.
+  quoteIndex: Persisted index into the original offline motivational quotes.
+  learned: Learning debrief.
+  nextStep: Optional next-session objective.
+  studyXp: Study reward (30 or 100); zero for unsuccessful or pending attempts.
+  questXp: Ordinary linked-quest XP, separate from Study XP.
+
+Study XP uses source STUDY in xp_log.csv and has no quest multipliers. Exactly
+60 minutes pays 30 XP; completed measured duration above 60 minutes pays 100 XP.
+Start consumes one of three daily attempts even if discarded. Interrupted,
+incomplete, discarded and pending attempts grant no Study XP. Running timers
+recover within the same boot; reboot/restore ends them without invented time.

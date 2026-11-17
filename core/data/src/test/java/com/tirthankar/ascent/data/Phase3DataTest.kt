@@ -9,6 +9,7 @@ import com.tirthankar.ascent.data.db.GateStatus
 import com.tirthankar.ascent.data.db.LoreTarget
 import com.tirthankar.ascent.data.db.QuestKind
 import com.tirthankar.ascent.data.db.QuestStatus
+import com.tirthankar.ascent.data.db.QuestSource
 import com.tirthankar.ascent.data.repo.BossException
 import com.tirthankar.ascent.data.repo.BossRefusal
 import com.tirthankar.ascent.data.repo.NewArc
@@ -136,6 +137,34 @@ class Phase3DataTest {
         assertTrue(done.xpAwarded == 32L || done.xpAwarded == 64L, "${done.xpAwarded}")
         // Side quests don't sit in today's Daily list.
         assertTrue(g.db.questDao().getDay(today.toEpochDay()).none { it.kind == QuestKind.SIDE })
+    }
+
+    @Test
+    fun `completed balance side quest is not replaced until the next game day`() = runTest {
+        val g = newGame()
+        val today = g.gameDay.today()
+        val original = g.db.questDao().getKindOnDay(QuestKind.SIDE, today.toEpochDay())
+            .single { it.source == QuestSource.TEMPLATE }
+        assertTrue(g.quests.complete(original.id))
+        val xp = g.db.playerDao().getPlayer()!!.totalXp
+
+        repeat(3) { g.cycle.ensureUpToDate() }
+
+        val issued = g.db.questDao().getKindOnDay(QuestKind.SIDE, today.toEpochDay())
+            .filter { it.source == QuestSource.TEMPLATE }
+        assertEquals(listOf(original.id), issued.map { it.id })
+        assertEquals(QuestStatus.DONE, issued.single().status)
+        assertEquals(xp, g.db.playerDao().getPlayer()!!.totalXp)
+        assertEquals(QuestStatus.DONE, g.quests.observeSide(today).first().single { it.id == original.id }.status)
+        assertNotNull(g.sideQuests.addBounty("Pick up a parcel"))
+
+        g.nextDay()
+        val tomorrow = g.gameDay.today()
+        val next = g.db.questDao().getKindOnDay(QuestKind.SIDE, tomorrow.toEpochDay())
+            .single { it.source == QuestSource.TEMPLATE }
+        assertTrue(next.id != original.id)
+        assertEquals(QuestStatus.OPEN, next.status)
+        assertTrue(g.quests.observeSide(tomorrow).first().none { it.id == original.id })
     }
 
     @Test

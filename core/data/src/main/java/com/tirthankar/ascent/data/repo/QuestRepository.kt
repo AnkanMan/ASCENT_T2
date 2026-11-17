@@ -323,19 +323,23 @@ class QuestRepository @Inject constructor(
             planner.reconcile()
             var quest = questDao.getById(questId) ?: return@withTransaction false
             if (quest.status != QuestStatus.OPEN || !quest.isCurrent(gameDay.today())) return@withTransaction false
+            val study = db.studyDao().active()
+            if (study?.questId == questId && sessionId != study.taskSessionId) return@withTransaction false
             if (sessionId != null) {
                 val session = db.plannerDao().session(sessionId) ?: return@withTransaction false
                 val mode = quest.mode()
                 if (session.questId != questId || session.state != "RESULT" || session.endsAt <= time.now().toEpochMilli() || !PlannerRules.validResult(quantity, mode)) return@withTransaction false
                 val amount = if (mode == MeasurementMode.CHECKBOX) quest.target else quantity
-                val total = quest.actualProgress + amount
+                val singleFocus = PlannerRules.singleSessionFocus(quest.templateKey, quest.scope == QuestScope.DAILY)
+                if (singleFocus && (mode != MeasurementMode.DURATION || amount < quest.target)) return@withTransaction false
+                val total = if (singleFocus) amount else quest.actualProgress + amount
                 if (!total.isFinite()) return@withTransaction false
                 db.plannerDao().update(session.copy(state = "SAVED", quantity = amount, endedAt = time.now().toEpochMilli(), origin = if (adjusted) "MANUAL" else session.origin, note = note.trim()))
                 quest = quest.copy(actualProgress = total, legacyProgress = false)
                 questDao.update(quest)
                 if (total < quest.target) return@withTransaction true
             } else if (quest.kind == QuestKind.NORMAL && quest.actualProgress < quest.target) {
-                val missing = quest.target - quest.actualProgress
+                val missing = if (PlannerRules.singleSessionFocus(quest.templateKey, quest.scope == QuestScope.DAILY)) quest.target else quest.target - quest.actualProgress
                 db.plannerDao().cancelQuestSessions(questId)
                 db.plannerDao().insert(TaskSessionEntity(java.util.UUID.randomUUID().toString(), questId = questId, state = "SAVED", startedAt = time.now().toEpochMilli(), endsAt = time.now().toEpochMilli(), endedAt = time.now().toEpochMilli(), quantity = missing, origin = "MANUAL"))
                 quest = quest.copy(actualProgress = quest.target, legacyProgress = false)
@@ -650,4 +654,5 @@ internal fun QuestEntity.canUndo(player: PlayerEntity?, today: Long, weekStart: 
         }
 
 internal fun QuestEntity.mode(): MeasurementMode =
-    if (measurementMode == "AUTO") PlannerRules.mode(unit) else MeasurementMode.valueOf(measurementMode)
+    if (PlannerRules.singleSessionFocus(templateKey, scope == QuestScope.DAILY)) MeasurementMode.DURATION
+    else if (measurementMode == "AUTO") PlannerRules.mode(unit) else MeasurementMode.valueOf(measurementMode)
